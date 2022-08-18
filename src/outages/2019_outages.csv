@@ -1,0 +1,43 @@
+StartDate,StartTime,EndDate,EndTime,Type,UnitName,Reason
+2019-02-02 ,18:00,2019-02-02 ,19:00,Planned,Kernkraftwerk Gösgen,Failure
+2019-02-02 ,18:00,2019-02-04 ,16:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-02 ,19:00,2019-02-02 ,20:00,Planned,Kernkraftwerk Gösgen,Failure
+2019-02-02 ,19:00,2019-02-02 ,20:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-02 ,20:00,2019-02-04 ,15:00,Planned,Kernkraftwerk Gösgen,Failure
+2019-02-02 ,20:00,2019-02-04 ,15:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-04 ,15:00,2019-02-04 ,16:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-04 ,16:00,2019-02-04 ,17:00,Forced,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-04 ,18:00,2019-02-05 ,01:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-04 ,19:00,2019-02-04 ,20:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-04 ,20:00,2019-02-04 ,21:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-04 ,21:00,2019-02-04 ,22:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-04 ,22:00,2019-02-04 ,23:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-04 ,23:00,2019-02-05 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-05 ,00:00,2019-02-05 ,01:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-05 ,01:00,2019-02-05 ,02:00,Forced,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-05 ,02:00,2019-02-05 ,06:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-05 ,03:00,2019-02-05 ,04:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-05 ,04:00,2019-02-05 ,05:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-05 ,05:00,2019-02-05 ,06:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-05 ,07:00,2019-02-05 ,10:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-05 ,08:00,2019-02-05 ,10:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-05 ,12:00,2019-02-05 ,14:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-02-06 ,18:59,2019-02-06 ,22:59,Forced,Leibstadt,Failure
+2019-02-06 ,22:59,2019-06-03 ,12:00,Planned,Leibstadt,Failure
+2019-04-11 ,05:00,2019-04-11 ,08:00,Planned,KKM Produktion,Foreseen Maintenance
+2019-04-24 ,18:12,2019-04-25 ,15:30,Forced,Leibstadt,Failure
+2019-04-25 ,15:30,2019-07-03 ,12:00,Planned,Leibstadt,Failure
+2019-04-30 ,12:00,2019-05-12 ,12:00,Planned,Beznau 1,Foreseen Maintenance
+2019-06-01 ,00:00,2019-07-02 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2019-06-03 ,09:00,2019-07-03 ,12:00,Planned,Leibstadt,Failure
+2019-06-03 ,12:00,2019-07-03 ,12:00,Planned,Leibstadt,Failure
+2019-06-07 ,12:00,2019-07-08 ,12:00,Planned,Beznau 2,Foreseen Maintenance
+2019-06-13 ,05:00,2019-06-13 ,08:00,Planned,KKM Produktion,Foreseen Maintenance
+2019-06-24 ,12:00,2019-10-02 ,12:00,Planned,Leibstadt,Foreseen Maintenance
+2019-06-24 ,12:00,2019-10-27 ,12:00,Planned,Leibstadt,Failure
+2019-08-06 ,01:35,2019-08-06 ,12:20,Forced,Beznau 1,Failure
+2019-08-10 ,20:00,2019-09-20 ,09:00,Planned,Beznau 2,Foreseen Maintenance
+2019-08-12 ,12:00,2019-09-20 ,09:00,Planned,Beznau 2,Foreseen Maintenance
+2019-08-15 ,05:00,2019-08-15 ,08:00,Planned,KKM Produktion,Foreseen Maintenance
+2019-08-16 ,12:00,2019-09-20 ,09:00,Planned,Beznau 2,Foreseen Maintenance
+2019-12-28 ,07:49,2019-12-31 ,08:00,Forced,Leibstadt,Failure

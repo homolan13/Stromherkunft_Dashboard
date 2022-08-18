@@ -1,0 +1,19 @@
+StartDate,StartTime,EndDate,EndTime,Type,UnitName,Reason
+2020-04-04 ,07:45,2020-04-04 ,08:45,Planned,Leibstadt,Foreseen Maintenance
+2020-04-17 ,12:00,2020-05-22 ,12:00,Planned,Beznau 1,Failure
+2020-04-24 ,12:00,2020-05-25 ,12:00,Planned,Beznau 1,Failure
+2020-04-25 ,07:45,2020-04-25 ,08:45,Planned,Leibstadt,Foreseen Maintenance
+2020-04-27 ,12:00,2020-08-30 ,12:00,Planned,Leibstadt,Failure
+2020-06-01 ,00:00,2020-08-12 ,13:00,Planned,Leibstadt,Failure
+2020-06-06 ,00:00,2020-06-24 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2020-06-23 ,12:00,2020-07-05 ,12:00,Planned,Beznau 2,Failure
+2020-06-29 ,12:00,2020-08-13 ,12:00,Planned,Leibstadt,Failure
+2020-08-04 ,11:00,2020-08-17 ,21:00,Planned,Beznau 2,Failure
+2020-08-04 ,12:00,2020-08-16 ,12:00,Planned,Beznau 2,Failure
+2020-08-11 ,10:00,2020-08-11 ,15:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2020-08-31 ,12:00,2020-09-30 ,12:00,Planned,Leibstadt,Failure
+2020-10-19 ,14:59,2020-10-20 ,12:00,Planned,Kernkraftwerk Gösgen,Failure
+2020-10-19 ,15:00,2020-10-19 ,17:00,Planned,Kernkraftwerk Gösgen,Failure
+2020-12-09 ,07:55,2020-12-09 ,12:00,Forced,Kernkraftwerk Gösgen,Failure
+2020-12-09 ,08:00,2020-12-29 ,23:00,Planned,Beznau 1,Failure
+2020-12-09 ,08:00,2021-01-01 ,00:00,Planned,Beznau 2,Failure

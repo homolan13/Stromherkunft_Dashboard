@@ -1,0 +1,8 @@
+StartDate,StartTime,EndDate,EndTime,Type,UnitName,Reason
+2021-02-06 ,07:45,2021-02-06 ,09:15,Planned,Leibstadt,Foreseen Maintenance
+2021-04-27 ,11:57,2021-04-28 ,00:00,Forced,Beznau 1,Failure
+2021-06-05 ,00:00,2021-07-09 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2021-08-02 ,12:00,2021-09-01 ,12:00,Planned,Leibstadt,Failure
+2021-08-06 ,12:00,2021-09-12 ,12:00,Planned,Beznau 2,Failure
+2021-08-17 ,10:00,2021-08-17 ,15:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2021-11-12 ,04:30,2021-11-12 ,18:00,Forced,Kernkraftwerk Gösgen,Failure

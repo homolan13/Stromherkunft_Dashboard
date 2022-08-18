@@ -1,0 +1,41 @@
+StartDate,StartTime,EndDate,EndTime,Type,UnitName,Reason
+2018-01-01 ,00:00,2018-03-31 ,12:00,Forced,Beznau 1,Foreseen Maintenance
+2018-01-01 ,00:00,2018-09-17 ,12:00,Planned,Leibstadt,Failure
+2018-02-01 ,22:18,2018-02-02 ,00:01,Forced,Leibstadt,Failure
+2018-02-02 ,00:01,2018-09-17 ,12:00,Planned,Leibstadt,Failure
+2018-03-07 ,10:34,2018-03-08 ,06:00,Forced,KKM Produktion,Failure
+2018-03-08 ,04:00,2018-03-08 ,07:00,Planned,KKM Produktion,Foreseen Maintenance
+2018-03-24 ,07:30,2018-03-24 ,08:30,Planned,Leibstadt,Failure
+2018-03-24 ,08:30,2018-09-17 ,12:00,Planned,Leibstadt,Failure
+2018-04-10 ,11:00,2018-04-10 ,14:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2018-04-27 ,12:00,2018-05-24 ,12:00,Planned,Beznau 1,Foreseen Maintenance
+2018-05-05 ,07:30,2018-05-05 ,08:30,Planned,Leibstadt,Failure
+2018-05-05 ,08:30,2018-06-16 ,07:30,Planned,Leibstadt,Failure
+2018-05-17 ,04:00,2018-05-17 ,07:00,Planned,KKM Produktion,Foreseen Maintenance
+2018-06-02 ,00:00,2018-06-25 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2018-06-02 ,13:00,2018-06-24 ,13:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance
+2018-06-16 ,07:30,2018-06-16 ,08:45,Planned,Leibstadt,Failure
+2018-06-16 ,08:45,2018-07-28 ,07:30,Planned,Leibstadt,Failure
+2018-06-26 ,12:00,2018-07-09 ,19:00,Planned,Beznau 2,Foreseen Maintenance
+2018-07-28 ,07:30,2018-07-28 ,08:15,Planned,Leibstadt,Failure
+2018-07-28 ,08:15,2018-09-17 ,12:00,Planned,Leibstadt,Failure
+2018-08-06 ,12:00,2018-09-01 ,12:00,Planned,Leibstadt,Foreseen Maintenance
+2018-08-06 ,12:00,2018-09-01 ,12:00,Planned,Leibstadt,Failure
+2018-08-08 ,13:00,2018-08-10 ,16:00,Planned,Beznau 1,Shutdown
+2018-08-08 ,13:00,2018-08-10 ,16:00,Planned,Beznau 2,Shutdown
+2018-08-11 ,07:30,2018-08-11 ,09:15,Planned,Leibstadt,Failure
+2018-08-11 ,09:15,2018-09-17 ,12:00,Planned,Leibstadt,Failure
+2018-08-12 ,00:00,2018-09-04 ,23:59,Planned,KKM Produktion,Foreseen Maintenance
+2018-08-13 ,00:00,2018-09-11 ,23:59,Planned,KKM Produktion,Foreseen Maintenance
+2018-08-19 ,00:00,2018-09-13 ,09:00,Planned,KKM Produktion,Foreseen Maintenance
+2018-08-19 ,05:00,2018-08-21 ,08:00,Planned,Beznau 1,Foreseen Maintenance
+2018-08-24 ,12:00,2018-09-19 ,12:00,Planned,Beznau 1,Foreseen Maintenance
+2018-09-01 ,12:00,2019-01-01 ,00:00,Planned,Leibstadt,Failure
+2018-09-17 ,12:00,2018-10-13 ,12:00,Planned,Leibstadt,Failure
+2018-10-13 ,12:00,2019-01-01 ,00:00,Planned,Leibstadt,Failure
+2018-10-20 ,12:00,2019-01-01 ,00:00,Planned,Leibstadt,Failure
+2018-11-02 ,08:45,2019-01-01 ,00:00,Planned,Leibstadt,Failure
+2018-11-02 ,09:00,2019-01-01 ,00:00,Planned,Leibstadt,Failure
+2018-11-02 ,12:00,2019-01-01 ,00:00,Planned,Leibstadt,Failure
+2018-11-22 ,04:00,2018-11-22 ,07:00,Planned,KKM Produktion,Foreseen Maintenance
+2018-12-24 ,09:00,2018-12-24 ,23:59,Planned,KKM Produktion,Foreseen Maintenance

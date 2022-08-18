@@ -1,0 +1,76 @@
+StartDate,StartTime,EndDate,EndTime,Type,UnitName,Reason,OldVersion
+2022-03-05 ,08:15,2022-03-05 ,09:15,Planned,Leibstadt,Foreseen Maintenance,
+2022-03-13 ,07:45,2022-03-13 ,08:45,Planned,Leibstadt,Foreseen Maintenance,
+2022-04-25 ,12:00,2022-08-28 ,12:00,Planned,Leibstadt,Failure,
+2022-04-29 ,08:00,2022-07-02 ,13:00,Planned,Beznau 1,Failure,
+2022-04-29 ,11:00,2022-06-22 ,11:00,Planned,Beznau 1,Failure,
+2022-04-29 ,12:00,2022-06-17 ,12:00,Planned,Beznau 1,Failure,
+2022-05-21 ,00:00,2022-06-25 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance,
+2022-05-21 ,00:30,2022-06-24 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance,
+2022-05-28 ,00:00,2022-07-02 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance,
+2022-06-12 ,19:00,2022-07-12 ,18:00,Planned,Leibstadt,Failure,
+2022-06-13 ,12:00,2022-07-11 ,12:00,Planned,Leibstadt,Failure,
+2022-07-15 ,15:00,2022-07-15 ,20:00,Planned,Beznau 2,Shutdown,
+2022-07-15 ,15:00,2022-07-15 ,20:00,Planned,Beznau 1,Shutdown,
+2022-07-16 ,15:00,2022-07-16 ,20:00,Planned,Beznau 1,Shutdown,
+2022-07-16 ,15:00,2022-07-16 ,20:00,Planned,Beznau 2,Shutdown,
+2022-07-17 ,15:00,2022-07-17 ,20:00,Planned,Beznau 2,Shutdown,
+2022-07-17 ,15:00,2022-07-17 ,20:00,Planned,Beznau 1,Shutdown,
+2022-07-18 ,16:00,2022-07-18 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-18 ,16:00,2022-07-18 ,22:00,Planned,Beznau 1,Shutdown,
+2022-07-19 ,16:00,2022-07-19 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-19 ,16:00,2022-07-19 ,22:00,Planned,Beznau 1,Shutdown,
+2022-07-20 ,16:00,2022-07-20 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-20 ,16:00,2022-07-20 ,22:00,Planned,Beznau 1,Shutdown,
+2022-07-21 ,16:00,2022-07-21 ,22:00,Planned,Beznau 1,Shutdown,
+2022-07-21 ,16:00,2022-07-21 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-22 ,16:00,2022-07-22 ,22:00,Planned,Beznau 1,Shutdown,
+2022-07-22 ,16:00,2022-07-22 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-23 ,16:00,2022-07-23 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-23 ,16:00,2022-07-23 ,22:00,Planned,Beznau 1,Shutdown,
+2022-07-24 ,13:00,2022-07-25 ,02:00,Planned,Beznau 1,Shutdown,
+2022-07-24 ,13:00,2022-07-25 ,02:00,Planned,Beznau 2,Shutdown,
+2022-07-24 ,16:00,2022-07-24 ,22:00,Forced,Beznau 2,Shutdown,
+2022-07-24 ,16:00,2022-07-24 ,22:00,Forced,Beznau 1,Shutdown,
+2022-07-24 ,16:00,2022-07-24 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-24 ,16:00,2022-07-25 ,02:00,Planned,Beznau 1,Shutdown,
+2022-07-24 ,22:00,2022-07-25 ,02:00,Planned,Beznau 2,Shutdown,
+2022-07-25 ,16:00,2022-07-25 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-25 ,16:00,2022-07-25 ,22:00,Planned,Beznau 1,Shutdown,
+2022-07-27 ,13:00,2022-07-28 ,22:00,Planned,Beznau 1,Shutdown,
+2022-07-27 ,16:00,2022-07-27 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-28 ,16:00,2022-07-28 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-29 ,16:00,2022-07-29 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-29 ,16:00,2022-07-29 ,22:00,Planned,Beznau 1,Shutdown,
+2022-07-30 ,16:00,2022-07-30 ,22:00,Planned,Beznau 2,Shutdown,
+2022-07-30 ,16:00,2022-07-30 ,22:00,Planned,Beznau 1,Shutdown,
+2022-07-31 ,16:00,2022-07-31 ,22:00,Planned,Beznau 1,Shutdown,
+2022-07-31 ,16:00,2022-07-31 ,22:00,Planned,Beznau 2,Shutdown,
+2022-08-01 ,16:00,2022-08-01 ,22:00,Planned,Beznau 1,Shutdown,
+2022-08-01 ,16:00,2022-08-01 ,22:00,Planned,Beznau 2,Shutdown,
+2022-08-01 ,16:00,2022-08-01 ,22:00,Planned,Beznau 2,Shutdown,False
+2022-08-01 ,16:00,2022-08-01 ,22:00,Planned,Beznau 1,Shutdown,False
+2022-08-02 ,10:00,2022-08-02 ,22:00,Planned,Beznau 1,Shutdown,
+2022-08-02 ,10:00,2022-08-02 ,22:00,Planned,Beznau 2,Shutdown,
+2022-08-02 ,10:00,2022-08-02 ,22:00,Planned,Beznau 2,Shutdown,False
+2022-08-02 ,10:00,2022-08-02 ,22:00,Planned,Beznau 1,Shutdown,False
+2022-08-04 ,10:00,2022-08-05 ,03:00,Planned,Beznau 2,Shutdown,
+2022-08-04 ,10:00,2022-08-05 ,03:00,Planned,Beznau 1,Shutdown,
+2022-08-04 ,10:00,2022-08-05 ,03:00,Planned,Beznau 1,Shutdown,False
+2022-08-04 ,10:00,2022-08-05 ,03:00,Planned,Beznau 2,Shutdown,False
+2022-08-05 ,10:00,2022-08-06 ,03:00,Planned,Beznau 1,Shutdown,
+2022-08-05 ,10:00,2022-08-06 ,03:00,Planned,Beznau 2,Shutdown,
+2022-08-05 ,10:00,2022-08-06 ,03:00,Planned,Beznau 1,Shutdown,False
+2022-08-05 ,10:00,2022-08-06 ,03:00,Planned,Beznau 2,Shutdown,False
+2022-08-06 ,12:00,2022-08-07 ,00:00,Planned,Beznau 2,Shutdown,
+2022-08-06 ,12:00,2022-08-07 ,00:00,Planned,Beznau 1,Shutdown,
+2022-08-06 ,12:00,2022-08-07 ,00:00,Planned,Beznau 2,Shutdown,False
+2022-08-06 ,12:00,2022-08-07 ,00:00,Planned,Beznau 1,Shutdown,False
+2022-08-07 ,12:00,2022-08-08 ,00:00,Planned,Beznau 1,Shutdown,
+2022-08-07 ,12:00,2022-08-08 ,00:00,Planned,Beznau 1,Shutdown,False
+2022-08-08 ,06:00,2022-08-22 ,11:00,Planned,Beznau 2,Failure,
+2022-08-08 ,06:00,2022-08-22 ,11:00,Planned,Beznau 2,Failure,False
+2022-08-09 ,11:00,2022-08-22 ,11:00,Planned,Beznau 2,Failure,
+2022-08-09 ,11:00,2022-08-22 ,11:00,Planned,Beznau 2,Failure,True
+2022-08-09 ,12:00,2022-08-21 ,12:00,Planned,Beznau 2,Failure,
+2022-08-09 ,12:00,2022-08-21 ,12:00,Planned,Beznau 2,Failure,True
