@@ -1,6 +1,8 @@
+import sys
 import os
 from datetime import datetime, timedelta
 from tqdm import tqdm
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dep.FileMaker import FileMaker
 
 # today = datetime.today() - timedelta(days=1) # real date

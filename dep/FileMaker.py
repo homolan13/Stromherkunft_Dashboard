@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.patches import ConnectionPatch
 from datetime import datetime, timedelta
-from TextRepositories import *
+from dep.TextRepositories import *
 
 class FileMaker:
     def __init__(self, today: datetime, params: dict):
@@ -17,7 +17,7 @@ class FileMaker:
         marker_type = {k:v for k,v in zip(units,['$G$', '$L$', '$M$', '$B_1$', '$B_2$'])}
         history = {k:[] for k in units} # values are of type ('planned/forced', idx)
 
-        outages = pd.read_csv(os.path.join('outages',f'{self.today.year}_outages.csv'))
+        outages = pd.read_csv(os.path.join('src', 'outages',f'{self.today.year}_outages.csv'))
         for _, outage in outages.iterrows():
             x1 = outage['StartDate']
             x2 = outage['StartTime'][:2]
@@ -74,7 +74,7 @@ class FileMaker:
 
         data = []
         for my in last_30_my:
-            fname = os.path.join('generation',f'{my[0]}',f'{my[0]}_{my[1]:02d}_generation.csv')
+            fname = os.path.join('src','generation',f'{my[0]}',f'{my[0]}_{my[1]:02d}_generation.csv')
             f_data = pd.read_csv(fname)
             data.extend([f_data[f_data['Date'].str.contains(date_str)] for date_str in last_30_str])
         data = pd.concat(data, axis=0)
@@ -93,7 +93,7 @@ class FileMaker:
         stack_max = max(np.sum(y, axis=0))
 
         ### Create figures
-        logo = plt.imread('swissnuclear logo.png')
+        logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
         for text_repo in text_repos:
             fig = plt.figure(figsize=(20,10), dpi=300)
             ax = plt.gca()
@@ -147,7 +147,7 @@ class FileMaker:
         ### Prepare data
         month = today.month
         year = today.year
-        f = os.path.join('generation',str(year),f'{year}_{month:02d}_generation.csv')
+        f = os.path.join('src','generation',str(year),f'{year}_{month:02d}_generation.csv')
         data = pd.read_csv(f)
         data.insert(3, 'Export', pd.NA)
         data.insert(3, 'Import', pd.NA)
@@ -159,7 +159,7 @@ class FileMaker:
         ticks = [f'{d[-3:-1]}.{d[5:7]}.' for d in data['Date']]
 
         ### Create figures
-        logo = plt.imread('swissnuclear logo.png')
+        logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
         for text_repo in text_repos:
             fig = plt.figure(figsize=(20,10), dpi=300)
             ax = plt.gca()
@@ -259,7 +259,7 @@ class FileMaker:
         ### Prepare data
         data_list = []
         year = today.year
-        path_gen = os.path.join('generation', str(year))
+        path_gen = os.path.join('src','generation', str(year))
         for f in os.listdir(path_gen):
             data_list.append(pd.read_csv(os.path.join(path_gen, f)))
         data = pd.concat(data_list, axis=0)
@@ -274,7 +274,7 @@ class FileMaker:
         ticks = [f'{d[-3:-1]}.{d[5:7]}.' for d in data['Date']]
 
         ### Create figures
-        logo = plt.imread('swissnuclear logo.png')
+        logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
         for text_repo in text_repos:
             fig = plt.figure(figsize=(20,10), dpi=300)
             ax = plt.gca()
@@ -376,7 +376,7 @@ class FileMaker:
         ### Prepare data
         month = today.month
         year = today.year
-        f = os.path.join('generation',str(year),f'{year}_{month:02d}_generation.csv')
+        f = os.path.join('src','generation',str(year),f'{year}_{month:02d}_generation.csv')
         data = pd.read_csv(f)
         data.insert(3, 'Export', pd.NA)
         data.insert(3, 'Import', pd.NA)
@@ -389,7 +389,7 @@ class FileMaker:
         sums = [data['Nuclear'].sum(), data['Rest'].sum(), data['Import'].sum()]
 
         ### Create figures
-        logo = plt.imread('swissnuclear logo.png')
+        logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
         for text_repo in text_repos:
             fig, (ax1, ax2) = plt.subplots(1,2,figsize=(22,10))
             fig.subplots_adjust(wspace=0)
@@ -474,7 +474,7 @@ class FileMaker:
         ### Prepare data
         data_list = []
         year = today.year
-        path_gen = os.path.join('generation', str(year))
+        path_gen = os.path.join('src','generation', str(year))
         for f in os.listdir(path_gen):
             data_list.append(pd.read_csv(os.path.join(path_gen, f)))
         data = pd.concat(data_list, axis=0)
@@ -490,7 +490,7 @@ class FileMaker:
         sums = [data['Nuclear'].sum(), data['Rest'].sum(), data['Import'].sum()]
 
         ### Create figures
-        logo = plt.imread('swissnuclear logo.png')
+        logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
         for text_repo in text_repos:
             fig, (ax1, ax2) = plt.subplots(1,2,figsize=(22,10))
             fig.subplots_adjust(wspace=0)
@@ -574,7 +574,7 @@ class FileMaker:
         text_repos = [De, Fr, En]
 
         ### Prepare data
-        base = 'generation'
+        base = os.path.join('src','generation')
         years = os.listdir(base)
         years.remove(str(datetime.today().year))
         data = {y: {m: None for m in months} for y in years}
@@ -593,7 +593,7 @@ class FileMaker:
                 monthly_avg[m]['FlowValue'] = 0
 
         ### Create figures
-        logo = plt.imread('swissnuclear logo.png')
+        logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
         for text_repo in text_repos:
             for m, v in monthly_avg.items():
                 fig, (ax1, ax2) = plt.subplots(1,2,figsize=(22,10))
@@ -668,7 +668,7 @@ class FileMaker:
 
         # Convert data
         for _ in range(loops):
-            original_file = os.path.join('generation', f'{today.year}', f'{today.year}_{today.month:02d}_generation.csv')
+            original_file = os.path.join('src','generation', f'{today.year}', f'{today.year}_{today.month:02d}_generation.csv')
             data = pd.read_csv(original_file)
 
             imp = [flow_value if flow_value > 0 else 0 for flow_value in data['FlowValue']]
