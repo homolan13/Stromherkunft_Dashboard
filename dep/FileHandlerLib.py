@@ -24,7 +24,7 @@ class BaseFileHandler: # This is the base class for the different handlers
         self.rm_dir = rm_dir
         self.filename = filename
         self.data = None
-        self.localpath = os.path.join('src', '.downloads', self.filename)
+        self.localpath = os.path.join('core', '.downloads', self.filename)
 
     def __del__(self): # Destructor
         self.remove_file(warning=False)

@@ -25,8 +25,8 @@ def date_to_str(_date: datetime):
 def main():
     today = datetime.today()
     # Check for missing files by looking for the newest one
-    y = max([int(fname) for fname in os.listdir(os.path.join('src','generation'))])
-    m = max([int(fname[5:7]) for fname in os.listdir(os.path.join('src','generation',str(y)))])
+    y = max([int(fname) for fname in os.listdir(os.path.join('core','generation'))])
+    m = max([int(fname[5:7]) for fname in os.listdir(os.path.join('core','generation',str(y)))])
     if y != today.year or m != today.month: # This means files are missing  
         today = datetime(y,m,28)
     check_last_month = True # check if last month is already there to avoid a second, unnecessary update
@@ -80,7 +80,7 @@ def main():
             list_to_insert = type_dict[p_type]+[0 for _ in range(len(data.index) - len(type_dict[p_type]))]
             data.insert(4, p_type, list_to_insert[:len(data.index)])
 
-        dir = os.path.join('src', 'generation', f'{today.year:04d}')
+        dir = os.path.join('core', 'generation', f'{today.year:04d}')
         if not os.path.exists(dir):
             os.makedirs(dir)
         filename_gen = os.path.join(dir, f'{date_to_str(today)}_generation.csv')
@@ -88,7 +88,7 @@ def main():
         print(f'\t\t{filename_gen}')
 
         # Outages file
-        filename_out = os.path.join('src', 'outages',f'{today.year:04d}_outages.csv')
+        filename_out = os.path.join('core', 'outages',f'{today.year:04d}_outages.csv')
         if os.path.exists(filename_out):
             data = pd.read_csv(filename_out) # delimiter should be comma
             data = pd.concat([data, Outages.data], axis=0)
