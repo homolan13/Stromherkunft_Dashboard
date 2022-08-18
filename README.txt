@@ -1,4 +1,4 @@
-Stand: 16.08.2022 13:40
+Stand: 18.08.2022 14:40
 
 Um monatlich und jährlich sowie für die letzten 30 Tage täglich eine Grafik zur Visualisierung der
 Produktionsdaten der Schweizer KKW zu erstellen, braucht es die beiden Dateien download_extract_save_remove.py
