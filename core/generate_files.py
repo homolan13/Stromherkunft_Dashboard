@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dep.FileMaker import FileMaker
 
 # today = datetime.today() - timedelta(days=1) # real date
-today = datetime(2019,1,6) # custom date
+today = datetime(2020,1,6) # custom date
 
 directories = {
     'export': 'Export',
@@ -22,7 +22,7 @@ params = {
     'colormap': ['#e69624', '#C8C8C8', '#7a1b1f', '#78a014'], # specified by corporate design
     'line': '#ba6d02',
     'text': '#915500',
-    'include_outages': True,
+    'include_outages': False,
     'Planned': '#663c00', # Do not change key
     'Forced': '#210900', # Do not change key
     'save_plot': True

@@ -14,12 +14,12 @@ class FileMaker:
         self.names = ['Gösgen', 'Leibstadt', 'Mühleberg', 'Beznau 1', 'Beznau 2']
         self.names_dict = {k:v for k,v in zip(self.units,self.names)}
 
-    def _get_outages(self, data: pd.DataFrame):
+    def _get_outages(self, data: pd.DataFrame, today: datetime):
         return_list = [] # one entry: (unit, x, y, marker, color)
         marker_type = {k:v for k,v in zip(self.units,['$G$', '$L$', '$M$', '$B_1$', '$B_2$'])}
         history = {k:[] for k in self.units} # values are of type ('planned/forced', idx)
 
-        outages = pd.read_csv(os.path.join('core', 'outages',f'{self.today.year}_outages.csv'))
+        outages = pd.read_csv(os.path.join('core', 'outages',f'{today.year}_outages.csv'))
         for _, outage in outages.iterrows():
             x1 = outage['StartDate']
             x2 = outage['StartTime'][:2]
@@ -38,13 +38,20 @@ class FileMaker:
 
         return return_list
 
-    def _csp(self, data, min_dist):
+    def _csp(self, data, outage_idx, min_dist):
         """
         Returns index to position annotation labels using a constraint satisfaction problem
         """
         unit_idx = {k: None for k in self.units} # initialise dict
         for u in self.units:
             indices = list(data[data[u] > 250].index)
+            mask = [True for _ in indices]
+            for o_idx in outage_idx:
+                for i, idx in enumerate(indices):
+                    if abs(idx-o_idx) < min_dist:
+                        mask[i] = False # inplace removing makes problems as indices are skipped, thus use masking
+
+            indices = [idx for i,idx in enumerate(indices) if mask[i]]
             if indices:
                 unit_idx[u] = indices
 
@@ -70,7 +77,6 @@ class FileMaker:
 
         return unit_idx
         
-
     def make_dirs(self):
         dirs = self.params['directories']
         for l1 in dirs['layer1']:
@@ -199,7 +205,27 @@ class FileMaker:
             fig = plt.figure(figsize=(20,10), dpi=300)
             ax = plt.gca()
 
-            annotation_idx = self._csp(data, 50)
+            outage_idx = []
+            if self.params['include_outages']:
+                outages = self._get_outages(data, today)
+                planned, forced = False, False
+                if outages:
+                    outage_legend = set()
+                    for outage in outages:
+                        outage_legend.add(text_repo.outage_annotations[outage[0]])
+                        outage_idx.append(outage[1])
+                        plt.scatter(outage[1], outage[2], marker=outage[3], s=120, c=outage[4], clip_on=False, zorder=20)
+                        if not planned:
+                            if outage[4] == self.params['Planned']:
+                                plt.annotate(text_repo.planned, (outage[1]-4, outage[2]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                                planned = True
+                        if not forced:
+                            if outage[4] == self.params['Forced']:                
+                                plt.annotate(text_repo.forced, (outage[1]-4, outage[2]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                                forced = True
+                    plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
+
+            annotation_idx = self._csp(data, outage_idx, 50)
             y = np.array([data['Nuclear'], rest, data['Import'], data['Export']])
             plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap'], labels=text_repo.labels_stack, zorder=10)
             accumulated = pd.concat([data[unit] for unit in self.units], axis=1).cumsum(axis=1)
@@ -212,27 +238,7 @@ class FileMaker:
             stack_max = max(np.sum(y, axis=0))
 
             plt.plot(data['TotalLoadValue'], color='k', linewidth=2, label=text_repo.labels_load, zorder=11)
-
-            if self.params['include_outages']:
-                outages = self._get_outages(data)
-                planned, forced = False, False
-                if outages:
-                    outage_legend = set()
-                    for outage in outages:
-                        outage_legend.add(text_repo.outage_annotations[outage[0]])
-                        plt.scatter(outage[1], outage[2], marker=outage[3], s=120, c=outage[4], clip_on=False, zorder=20)
-                        if not planned:
-                            if outage[4] == self.params['Planned']:
-                                plt.annotate(text_repo.planned, (outage[1]-4, outage[2]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
-                                planned = True
-                        if not forced:
-                            if outage[4] == self.params['Forced']:                
-                                plt.annotate(text_repo.forced, (outage[1]-4, outage[2]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
-                                forced = True
-                        plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
-                    
-                    
-
+              
             plt.title(text_repo.title, fontsize=34)
 
             plt.xticks([i for i in range(len(data.index)) if i%24 == 0], [int(tick[:2]) for tick in ticks[::24]], ha='left')
@@ -297,7 +303,27 @@ class FileMaker:
             fig = plt.figure(figsize=(20,10), dpi=300)
             ax = plt.gca()
 
-            annotation_idx = self._csp(data, 500)
+            outage_idx = []
+            if self.params['include_outages']:
+                outages = self._get_outages(data, today)
+                planned, forced = False, False
+                if outages:
+                    outage_legend = set()
+                    for outage in outages:
+                        outage_legend.add(text_repo.outage_annotations[outage[0]])
+                        outage_idx.append(outage[1])
+                        plt.scatter(outage[1], outage[2], marker=outage[3], s=120, c=outage[4], clip_on=False, zorder=20)
+                        if not planned:
+                            if outage[4] == self.params['Planned']:
+                                plt.annotate(text_repo.planned, (outage[1]-4, outage[2]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                                planned = True
+                        if not forced:
+                            if outage[4] == self.params['Forced']:                
+                                plt.annotate(text_repo.forced, (outage[1]-4, outage[2]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                                forced = True
+                    plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
+
+            annotation_idx = self._csp(data, outage_idx, 500)
             y = np.array([data['Nuclear'], rest, data['Import'], data['Export']])
             plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap'], labels=text_repo.labels_stack, zorder=10)
             accumulated = pd.concat([data[unit] for unit in self.units], axis=1).cumsum(axis=1)
@@ -308,24 +334,6 @@ class FileMaker:
                     plt.annotate(self.names_dict[unit], xy=(idx, accumulated[unit].iloc[idx]+300), color=self.params['text'], fontsize=14, ha='center', va='center', annotation_clip=False, zorder=14)
             
             stack_max = max(np.sum(y, axis=0))
-
-            if self.params['include_outages']:
-                outages = self._get_outages(data)
-                planned, forced = False, False
-                if outages:
-                    outage_legend = set()
-                    for outage in outages:
-                        outage_legend.add(text_repo.outage_annotations[outage[0]])
-                        plt.scatter(outage[1], outage[2], marker=outage[3], s=120, c=outage[4], clip_on=False, zorder=20)
-                        if not planned:
-                            if outage[4] == self.params['Planned']:
-                                plt.annotate(text_repo.planned, (outage[1]-4, outage[2]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
-                                planned = True
-                        if not forced:
-                            if outage[4] == self.params['Forced']:                
-                                plt.annotate(text_repo.forced, (outage[1]-4, outage[2]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
-                                forced = True
-                        plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
 
             plt.title(text_repo.title, fontsize=34)
 
@@ -362,7 +370,7 @@ class FileMaker:
     def make_month_piebar(self):
         today = self.today - timedelta(days=28)
 
-        plt.rcParams['font.size'] = self.params['fontsize']+6
+        plt.rcParams['font.size'] = self.params['fontsize']+2
         plt.rcParams['font.family'] = self.params['fontfamily']
 
         d = self.params['directories']
@@ -415,15 +423,16 @@ class FileMaker:
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
                     bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.2*j)
-                    ax2.bar_label(bc, labels=[f'{height:.0%}'], label_type='center')
-
+                    pct = pie_ratios[0]*height
+                    ax2.bar_label(bc, labels=[f'{pct:.0%}'], label_type='center')
             else:
                 bar_ratios = [data[unit].sum() for unit in self.units if unit != 'KKM Produktion'] / data['Nuclear'].sum()
                 bottom, width = 1, 0.1
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
                     bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.25*j)
-                    ax2.bar_label(bc, labels=[f'{height:.0%}'], label_type='center')
+                    pct = pie_ratios[0]*height
+                    ax2.bar_label(bc, labels=[f'{pct:.0%}'], label_type='center')
                 
             ax2.legend(loc=7)
             ax2.axis('off')
@@ -447,6 +456,7 @@ class FileMaker:
             ax2.add_artist(con)
             con.set_linewidth(2)
 
+            plt.annotate(text_repo.roundingerror, xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
             plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.62,0.03), fontsize=10)
 
             imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE')
@@ -461,7 +471,7 @@ class FileMaker:
     def make_year_piebar(self):
         today = self.today - timedelta(days=365)
 
-        plt.rcParams['font.size'] = self.params['fontsize']+6
+        plt.rcParams['font.size'] = self.params['fontsize']+2
         plt.rcParams['font.family'] = self.params['fontfamily']
         d = self.params['directories']
         path = os.path.join(d['export'], d['base'][0], d['layer1'][2])
@@ -516,7 +526,8 @@ class FileMaker:
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
                     bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.2*j)
-                    ax2.bar_label(bc, labels=[f'{height:.0%}'], label_type='center')
+                    pct = pie_ratios[0]*height
+                    ax2.bar_label(bc, labels=[f'{pct:.0%}'], label_type='center')
 
             else:
                 bar_ratios = [data[unit].sum() for unit in self.units if unit != 'KKM Produktion'] / data['Nuclear'].sum()
@@ -524,7 +535,8 @@ class FileMaker:
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
                     bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.25*j)
-                    ax2.bar_label(bc, labels=[f'{height:.0%}'], label_type='center')
+                    pct = pie_ratios[0]*height
+                    ax2.bar_label(bc, labels=[f'{pct:.0%}'], label_type='center')
                 
             ax2.legend(loc=7)
             ax2.axis('off')
@@ -548,6 +560,7 @@ class FileMaker:
             ax2.add_artist(con)
             con.set_linewidth(2)
 
+            plt.annotate(text_repo.roundingerror, xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
             plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.62,0.03), fontsize=10)
 
             imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE')
@@ -562,7 +575,7 @@ class FileMaker:
     def make_alltime_piebar(self):
         today = self.today
 
-        plt.rcParams['font.size'] = self.params['fontsize']+6
+        plt.rcParams['font.size'] = self.params['fontsize']+2
         plt.rcParams['font.family'] = self.params['fontfamily']
         d = self.params['directories']
         path = os.path.join(d['export'], d['base'][0], d['layer1'][3])
@@ -619,7 +632,8 @@ class FileMaker:
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
                     bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.2*j)
-                    ax2.bar_label(bc, labels=[f'{height:.0%}'], label_type='center')
+                    pct = pie_ratios[0]*height
+                    ax2.bar_label(bc, labels=[f'{pct:.0%}'], label_type='center')
                 ax2.legend(loc=7)
                 ax2.axis('off')
                 ax2.set_xlim(- 2 * width, 3 * width)
@@ -642,6 +656,7 @@ class FileMaker:
                 ax2.add_artist(con)
                 con.set_linewidth(2)
 
+                plt.annotate(text_repo.roundingerror, xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
                 plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.62,0.03), fontsize=10)
 
                 imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE')
