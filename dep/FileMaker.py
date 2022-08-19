@@ -10,12 +10,14 @@ class FileMaker:
     def __init__(self, today: datetime, params: dict):
         self.today = today
         self.params = params
+        self.units = ['Kernkraftwerk Gösgen', 'Leibstadt', 'KKM Produktion', 'Beznau 1', 'Beznau 2']
+        self.names = ['Gösgen', 'Leibstadt', 'Mühleberg', 'Beznau 1', 'Beznau 2']
+        self.names_dict = {k:v for k,v in zip(self.units,self.names)}
 
     def _get_outages(self, data: pd.DataFrame):
-        return_list = [] # one entry: (x, y, marker, color)
-        units = ['Kernkraftwerk Gösgen', 'Leibstadt', 'KKM Produktion', 'Beznau 1', 'Beznau 2']
-        marker_type = {k:v for k,v in zip(units,['$G$', '$L$', '$M$', '$B_1$', '$B_2$'])}
-        history = {k:[] for k in units} # values are of type ('planned/forced', idx)
+        return_list = [] # one entry: (unit, x, y, marker, color)
+        marker_type = {k:v for k,v in zip(self.units,['$G$', '$L$', '$M$', '$B_1$', '$B_2$'])}
+        history = {k:[] for k in self.units} # values are of type ('planned/forced', idx)
 
         outages = pd.read_csv(os.path.join('core', 'outages',f'{self.today.year}_outages.csv'))
         for _, outage in outages.iterrows():
@@ -31,10 +33,43 @@ class FileMaker:
                 continue
             history[outage['UnitName']] = history[outage['UnitName']] + [start_idx+k for k in range(5*24)] # update captured outages
             
-            idx = units.index(outage['UnitName'])
-            return_list.append((start_idx, np.sum(np.array([data[units[unit]][start_idx] for unit in range(idx+1)]), axis=0), marker_type[outage['UnitName']], self.self.params[outage['Type']]))
+            idx = self.units.index(outage['UnitName'])
+            return_list.append((outage['UnitName'], start_idx, np.sum(np.array([data[self.units[unit]][start_idx] for unit in range(idx+1)]), axis=0), marker_type[outage['UnitName']], self.params[outage['Type']]))
 
         return return_list
+
+    def _csp(self, data, min_dist):
+        """
+        Returns index to position annotation labels using a constraint satisfaction problem
+        """
+        unit_idx = {k: None for k in self.units} # initialise dict
+        for u in self.units:
+            indices = list(data[data[u] > 250].index)
+            if indices:
+                unit_idx[u] = indices
+
+        data_len = len(data.index)
+        best_option = data_len//2
+
+        unit_len = {k: (len(unit_idx[k]) if type(unit_idx[k]) is list else data_len+1) for k in self.units}
+        while any(x < data_len+1 for x in list(unit_len.values())):
+            min_unit = min(unit_len, key=unit_len.get)
+            unit_idx[min_unit] = min(unit_idx[min_unit], key=lambda x:abs(x-best_option))
+            ### start of rule: at least min_distance between annotations ###
+            for v in unit_idx.values():
+                if type(v) is list:
+                    active_loop = True
+                    while active_loop:
+                        vmin = min(v, key=lambda x:abs(x-unit_idx[min_unit]))
+                        if abs(vmin - unit_idx[min_unit]) < min_dist and len(v) > 1:
+                            v.remove(vmin)
+                        else:
+                            active_loop = False
+            ### end of rule ###
+            unit_len = {k: (len(unit_idx[k]) if type(unit_idx[k]) is list else data_len+1) for k in self.units}
+
+        return unit_idx
+        
 
     def make_dirs(self):
         dirs = self.params['directories']
@@ -98,7 +133,7 @@ class FileMaker:
             fig = plt.figure(figsize=(20,10), dpi=300)
             ax = plt.gca()
 
-            plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap_last30'], labels=text_repo.labels_stack, zorder=10)
+            plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap'], labels=text_repo.labels_stack, zorder=10)
             plt.plot(data['TotalLoadValue'], color='k', linewidth=2, label=text_repo.labels_load, zorder=20)
 
             plt.title(text_repo.title, fontsize=34)
@@ -164,54 +199,37 @@ class FileMaker:
             fig = plt.figure(figsize=(20,10), dpi=300)
             ax = plt.gca()
 
-            if year < 2020: # include KKM
-                stacked_data = [data['Kernkraftwerk Gösgen'], data['Kernkraftwerk Gösgen']+data['Leibstadt'], data['Kernkraftwerk Gösgen']+data['Leibstadt']+data['KKM Produktion'], data['Kernkraftwerk Gösgen']+data['Leibstadt']+data['KKM Produktion']+data['Beznau 1'], data['Kernkraftwerk Gösgen']+data['Leibstadt']+data['KKM Produktion']+data['Beznau 1']+data['Beznau 2']]
-                y = np.array([data['Kernkraftwerk Gösgen'], data['Leibstadt'], data['KKM Produktion'], data['Beznau 1'], data['Beznau 2'], rest, data['Import'], data['Export']])
-                plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap_pre2020'], labels=[None, None, None, None]+text_repo.labels_stack, zorder=10)
-                plt.plot(range(0,len(data.index)), stacked_data[0], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[1], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[2], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[3], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[4], self.params['line'], lw=0.5, zorder=11)
-                plt.annotate('Gösgen',    (len(data.index)-160, stacked_data[0].iloc[len(data.index)-160]+100), color=self.params['text'], fontsize=14, rotation=45, zorder=12)
-                plt.annotate('Leibstadt', (len(data.index)-130, stacked_data[1].iloc[len(data.index)-130]+100), color=self.params['text'], fontsize=14, rotation=45, zorder=12)
-                plt.annotate('Mühleberg', (len(data.index)-100, stacked_data[2].iloc[len(data.index)-100]+100), color=self.params['text'], fontsize=14, rotation=45, zorder=12)
-                plt.annotate('Beznau 1',  (len(data.index)-70,  stacked_data[3].iloc[len(data.index)-70]+100),  color=self.params['text'],  fontsize=14, rotation=45, zorder=12)
-                plt.annotate('Beznau 2',  (len(data.index)-40,  stacked_data[4].iloc[len(data.index)-40]+100),  color=self.params['text'], fontsize=14, rotation=45, zorder=12)
-            else: # exclude KKM
-                stacked_data = [data['Kernkraftwerk Gösgen'], data['Kernkraftwerk Gösgen']+data['Leibstadt'], data['Kernkraftwerk Gösgen']+data['Leibstadt']+data['Beznau 1'], data['Kernkraftwerk Gösgen']+data['Leibstadt']+data['Beznau 1']+data['Beznau 2']]
-                y = np.array([data['Kernkraftwerk Gösgen'], data['Leibstadt'], data['Beznau 1'], data['Beznau 2'], rest, data['Import'], data['Export']])
-                plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap_post2020'], labels=[None, None, None]+text_repo.labels_stack, zorder=10)
-                plt.plot(range(0,len(data.index)), stacked_data[0], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[1], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[2], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[3], self.params['line'], lw=0.5, zorder=11)
-                plt.annotate('Gösgen',    (len(data.index)-130, stacked_data[0].iloc[len(data.index)-130]+100), color=self.params['text'], fontsize=14, rotation=45, zorder=12)
-                plt.annotate('Leibstadt', (len(data.index)-100, stacked_data[1].iloc[len(data.index)-100]+100), color=self.params['text'], fontsize=14, rotation=45, zorder=12)
-                plt.annotate('Beznau 1',  (len(data.index)-70,  stacked_data[2].iloc[len(data.index)-70]+100),  color=self.params['text'],  fontsize=14, rotation=45, zorder=12)
-                plt.annotate('Beznau 2',  (len(data.index)-40,  stacked_data[3].iloc[len(data.index)-40]+100),  color=self.params['text'], fontsize=14, rotation=45, zorder=12)
+            annotation_idx = self._csp(data, 50)
+            y = np.array([data['Nuclear'], rest, data['Import'], data['Export']])
+            plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap'], labels=text_repo.labels_stack, zorder=10)
+            accumulated = pd.concat([data[unit] for unit in self.units], axis=1).cumsum(axis=1)
+            for unit, idx in annotation_idx.items():
+                if idx is not None:
+                    plt.plot(range(0,len(data.index)), accumulated[unit], color=self.params['line'], lw=0.5, zorder=12)
+                    plt.scatter(idx, accumulated[unit].iloc[idx], c=self.params['text'], s=50, zorder=13, clip_on=False)
+                    plt.annotate(self.names_dict[unit], xy=(idx, accumulated[unit].iloc[idx]+300), color=self.params['text'], fontsize=14, ha='center', va='center', annotation_clip=False, zorder=14)
+
             stack_max = max(np.sum(y, axis=0))
 
-            plt.plot(data['TotalLoadValue'], color='k', linewidth=2, label=text_repo.labels_load, zorder=20)
+            plt.plot(data['TotalLoadValue'], color='k', linewidth=2, label=text_repo.labels_load, zorder=11)
 
             if self.params['include_outages']:
                 outages = self._get_outages(data)
                 planned, forced = False, False
                 if outages:
-                    if today.year < 2020:
-                        plt.annotate(text_repo.unit_annotation_pre2020, xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
-                    else:
-                        plt.annotate(text_repo.unit_annotation_post2020, xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
+                    outage_legend = set()
                     for outage in outages:
-                        plt.scatter(outage[0], outage[1], marker=outage[2], s=120, c=outage[3], clip_on=False, zorder=20)
+                        outage_legend.add(text_repo.outage_annotations[outage[0]])
+                        plt.scatter(outage[1], outage[2], marker=outage[3], s=120, c=outage[4], clip_on=False, zorder=20)
                         if not planned:
-                            if outage[3] == self.params['Planned']:
-                                plt.annotate(text_repo.planned, (outage[0]-4, outage[1]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                            if outage[4] == self.params['Planned']:
+                                plt.annotate(text_repo.planned, (outage[1]-4, outage[2]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
                                 planned = True
                         if not forced:
-                            if outage[3] == self.params['Forced']:                
-                                plt.annotate(text_repo.forced, (outage[0]-4, outage[1]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                            if outage[4] == self.params['Forced']:                
+                                plt.annotate(text_repo.forced, (outage[1]-4, outage[2]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
                                 forced = True
+                        plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
                     
                     
 
@@ -279,52 +297,35 @@ class FileMaker:
             fig = plt.figure(figsize=(20,10), dpi=300)
             ax = plt.gca()
 
-            if year < 2020: # include KKM
-                stacked_data = [data['Kernkraftwerk Gösgen'], data['Kernkraftwerk Gösgen']+data['Leibstadt'], data['Kernkraftwerk Gösgen']+data['Leibstadt']+data['KKM Produktion'], data['Kernkraftwerk Gösgen']+data['Leibstadt']+data['KKM Produktion']+data['Beznau 1'], data['Kernkraftwerk Gösgen']+data['Leibstadt']+data['KKM Produktion']+data['Beznau 1']+data['Beznau 2']]
-                y = np.array([data['Kernkraftwerk Gösgen'], data['Leibstadt'], data['KKM Produktion'], data['Beznau 1'], data['Beznau 2'], rest, data['Import'], data['Export']])
-                plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap_pre2020'], labels=[None, None, None, None]+text_repo.labels_stack, zorder=10)
-                plt.plot(range(0,len(data.index)), stacked_data[0], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[1], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[2], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[3], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[4], self.params['line'], lw=0.5, zorder=11)
-                plt.annotate('Gösgen',    (len(data.index)-1600, stacked_data[0].iloc[len(data.index)-1600]+120), color=self.params['text'], rotation=45, fontsize=14, zorder=12)
-                plt.annotate('Leibstadt', (len(data.index)-1300, stacked_data[1].iloc[len(data.index)-1300]+120), color=self.params['text'], rotation=45, fontsize=14, zorder=12)
-                plt.annotate('Mühleberg', (len(data.index)-1000, stacked_data[2].iloc[len(data.index)-1000]+120), color=self.params['text'], rotation=45, fontsize=14, zorder=12)
-                plt.annotate('Beznau 1',  (len(data.index)-700,  stacked_data[3].iloc[len(data.index)-700]+120),  color=self.params['text'], rotation=45, fontsize=14, zorder=12)
-                plt.annotate('Beznau 2',  (len(data.index)-400,  stacked_data[4].iloc[len(data.index)-400]+120),  color=self.params['text'], rotation=45, fontsize=14, zorder=12)
-            else: # exclude KKM
-                stacked_data = [data['Kernkraftwerk Gösgen'], data['Kernkraftwerk Gösgen']+data['Leibstadt'], data['Kernkraftwerk Gösgen']+data['Leibstadt']+data['Beznau 1'], data['Kernkraftwerk Gösgen']+data['Leibstadt']+data['Beznau 1']+data['Beznau 2']]
-                y = np.array([data['Kernkraftwerk Gösgen'], data['Leibstadt'], data['Beznau 1'], data['Beznau 2'], rest, data['Import'], data['Export']])
-                plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap_post2020'], labels=[None, None, None]+text_repo.labels_stack, zorder=10)
-                plt.plot(range(0,len(data.index)), stacked_data[0], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[1], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[2], self.params['line'], lw=0.5, zorder=11)
-                plt.plot(range(0,len(data.index)), stacked_data[3], self.params['line'], lw=0.5, zorder=11)
-                plt.annotate('Gösgen',    (len(data.index)-1300, stacked_data[0].iloc[len(data.index)-1300]+120), color=self.params['text'], rotation=45, fontsize=14, zorder=12)
-                plt.annotate('Leibstadt', (len(data.index)-1000, stacked_data[1].iloc[len(data.index)-1000]+120), color=self.params['text'], rotation=45, fontsize=14, zorder=12)
-                plt.annotate('Beznau 1',  (len(data.index)-700,  stacked_data[2].iloc[len(data.index)-700]+120),  color=self.params['text'], rotation=45, fontsize=14, zorder=12)
-                plt.annotate('Beznau 2',  (len(data.index)-400,  stacked_data[3].iloc[len(data.index)-400]+120),  color=self.params['text'], rotation=45, fontsize=14, zorder=12)
+            annotation_idx = self._csp(data, 500)
+            y = np.array([data['Nuclear'], rest, data['Import'], data['Export']])
+            plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap'], labels=text_repo.labels_stack, zorder=10)
+            accumulated = pd.concat([data[unit] for unit in self.units], axis=1).cumsum(axis=1)
+            for unit, idx in annotation_idx.items():
+                if idx is not None:
+                    plt.plot(range(0,len(data.index)), accumulated[unit], color=self.params['line'], lw=0.5, zorder=12)
+                    plt.scatter(idx, accumulated[unit].iloc[idx], c=self.params['text'], s=50, zorder=13, clip_on=False)
+                    plt.annotate(self.names_dict[unit], xy=(idx, accumulated[unit].iloc[idx]+300), color=self.params['text'], fontsize=14, ha='center', va='center', annotation_clip=False, zorder=14)
+            
             stack_max = max(np.sum(y, axis=0))
 
             if self.params['include_outages']:
                 outages = self._get_outages(data)
                 planned, forced = False, False
                 if outages:
-                    if today.year < 2020:
-                        plt.annotate(text_repo.unit_annotation_pre2020, xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
-                    else:
-                        plt.annotate(text_repo.unit_annotation_post2020, xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
+                    outage_legend = set()
                     for outage in outages:
-                        plt.scatter(outage[0], outage[1], marker=outage[2], s=120, c=outage[3], clip_on=False, zorder=20)
+                        outage_legend.add(text_repo.outage_annotations[outage[0]])
+                        plt.scatter(outage[1], outage[2], marker=outage[3], s=120, c=outage[4], clip_on=False, zorder=20)
                         if not planned:
-                            if outage[3] == self.params['Planned']:
-                                plt.annotate(text_repo.planned, (outage[0]-35, outage[1]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                            if outage[4] == self.params['Planned']:
+                                plt.annotate(text_repo.planned, (outage[1]-4, outage[2]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
                                 planned = True
                         if not forced:
-                            if outage[3] == self.params['Forced']:                
-                                plt.annotate(text_repo.forced, (outage[0]-35, outage[1]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                            if outage[4] == self.params['Forced']:                
+                                plt.annotate(text_repo.forced, (outage[1]-4, outage[2]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
                                 forced = True
+                        plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
 
             plt.title(text_repo.title, fontsize=34)
 
@@ -409,7 +410,7 @@ class FileMaker:
 
             # bar chart
             if today.year < 2020:
-                bar_ratios = [data['Kernkraftwerk Gösgen'].sum(), data['Leibstadt'].sum(), data['Beznau 1'].sum(), data['Beznau 2'].sum(), data['KKM Produktion'].sum()] / data['Nuclear'].sum()
+                bar_ratios = [data[unit].sum() for unit in self.units] / data['Nuclear'].sum()
                 bottom, width = 1, 0.1
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
@@ -417,7 +418,7 @@ class FileMaker:
                     ax2.bar_label(bc, labels=[f'{height:.0%}'], label_type='center')
 
             else:
-                bar_ratios = [data['Kernkraftwerk Gösgen'].sum(), data['Leibstadt'].sum(), data['Beznau 1'].sum(), data['Beznau 2'].sum()] / data['Nuclear'].sum()
+                bar_ratios = [data[unit].sum() for unit in self.units if unit != 'KKM Produktion'] / data['Nuclear'].sum()
                 bottom, width = 1, 0.1
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
@@ -510,7 +511,7 @@ class FileMaker:
 
             # bar chart
             if today.year < 2020:
-                bar_ratios = [data['Kernkraftwerk Gösgen'].sum(), data['Leibstadt'].sum(), data['Beznau 1'].sum(), data['Beznau 2'].sum(), data['KKM Produktion'].sum()] / data['Nuclear'].sum()
+                bar_ratios = [data[unit].sum() for unit in self.units] / data['Nuclear'].sum()
                 bottom, width = 1, 0.1
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
@@ -518,7 +519,7 @@ class FileMaker:
                     ax2.bar_label(bc, labels=[f'{height:.0%}'], label_type='center')
 
             else:
-                bar_ratios = [data['Kernkraftwerk Gösgen'].sum(), data['Leibstadt'].sum(), data['Beznau 1'].sum(), data['Beznau 2'].sum()] / data['Nuclear'].sum()
+                bar_ratios = [data[unit].sum() for unit in self.units if unit != 'KKM Produktion'] / data['Nuclear'].sum()
                 bottom, width = 1, 0.1
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
@@ -613,7 +614,7 @@ class FileMaker:
                     wedges, *_ = ax1.pie(pie_ratios, autopct='%1.0f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=['#e69624', '#7a1b1f', '#C8C8C8'])
 
                 # bar chart
-                bar_ratios = [v['Kernkraftwerk Gösgen'], v['Leibstadt'], v['Beznau 1'], v['Beznau 2'], v['KKM Produktion']] / v['Nuclear']
+                bar_ratios = [v[unit] for unit in self.units] / v['Nuclear']
                 bottom, width = 1, 0.1
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height

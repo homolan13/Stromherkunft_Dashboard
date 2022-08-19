@@ -10,8 +10,7 @@ class TextRepoDE:
         self.labels_load = 'Last'
         self.planned = 'Geplante Abschaltung'
         self.forced = 'Erzwungene Abschaltung'
-        self.unit_annotation_pre2020 = r'$G$: Gösgen, $L$: Leibstadt, $M$: Mühleberg, $B_{1/2}$: Beznau 1/2'
-        self.unit_annotation_post2020 = r'$G$: Gösgen, $L$: Leibstadt, $B_{1/2}$: Beznau 1/2'
+        self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_1$: Beznau 1', 'Beznau 2': r'$B_1$: Beznau 2'}
         self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Datenquelle: Entso-E'
         self.month = {1: 'Januar', 2: 'Februar', 3: 'März', 4: 'April', 5: 'Mai', 6: 'Juni', 7: 'Juli', 8: 'August', 9: 'September', 10: 'Oktober', 11: 'November', 12: 'Dezember'}
         self.month_abbr = {1: 'Jan.', 2: 'Febr.', 3: 'März', 4: 'Apr.', 5: 'Mai', 6: 'Juni', 7: 'Juli', 8: 'Aug.', 9: 'Sept.', 10: 'Okt.', 11: 'Nov.', 12: 'Dez.'}
@@ -89,8 +88,7 @@ class TextRepoFR:
         self.labels_load = 'Charge'
         self.planned = 'Arrêt planifié'
         self.forced = 'Arrêt forcé'
-        self.unit_annotation_pre2020 = r'$G$: Gösgen, $L$: Leibstadt, $M$: Mühleberg, $B_{1/2}$: Beznau 1/2'
-        self.unit_annotation_post2020 = r'$G$: Gösgen, $L$: Leibstadt, $B_{1/2}$: Beznau 1/2'
+        self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_1$: Beznau 1', 'Beznau 2': r'$B_1$: Beznau 2'}
         self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Source: Entso-E'
         self.month = {1: 'Janvier', 2: 'Février', 3: 'Mars', 4: 'Avril', 5: 'Mai', 6: 'Juin', 7: 'Juillet', 8: 'Août', 9: 'Septembre', 10: 'Octobre', 11: 'Novembre', 12: 'Décembre'}
         self.month_abbr = {1: 'Janv.', 2: 'Févr.', 3: 'Mars', 4: 'Avr.', 5: 'Mai', 6: 'Juin', 7: 'Juill.', 8: 'Août', 9: 'Sept.', 10: 'Oct.', 11: 'Nov.', 12: 'Déc.'}
@@ -168,8 +166,7 @@ class TextRepoEN:
         self.labels_load = 'Load'
         self.planned = 'Planned outage'
         self.forced = 'Forced outage'
-        self.unit_annotation_pre2020 = r'$G$: Gösgen, $L$: Leibstadt, $M$: Mühleberg, $B_{1/2}$: Beznau 1/2'
-        self.unit_annotation_post2020 = r'$G$: Gösgen, $L$: Leibstadt, $B_{1/2}$: Beznau 1/2'
+        self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_1$: Beznau 1', 'Beznau 2': r'$B_1$: Beznau 2'}
         self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Source: Entso-E'
         self.month = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'Mai', 6: 'June', 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
         self.month_abbr = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'Mai', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
