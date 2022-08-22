@@ -1,3 +1,7 @@
+"""
+Author: Yanis Schärer, yanis.schaerer@swissnuclear.ch
+Date of current status: see README.txt
+"""
 import os
 from datetime import datetime, timedelta
 

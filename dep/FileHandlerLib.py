@@ -1,3 +1,7 @@
+"""
+Author: Yanis Schärer, yanis.schaerer@swissnuclear.ch
+Date of current status: see README.txt
+"""
 import os
 import warnings
 import pysftp
@@ -31,12 +35,12 @@ class BaseFileHandler: # This is the base class for the different handlers
 
     def get_file_from_server(self, ignore_warnings=True):
         if ignore_warnings:
-            with warnings.catch_warnings():
+            with warnings.catch_warnings(): # suppress frequent unimportant warnings
                 warnings.simplefilter('ignore')
                 cnopts = pysftp.CnOpts()
                 cnopts.hostkeys = None
                 with pysftp.Connection(self.host, port=self.port, username=self.user, password=self.pw, cnopts=cnopts) as c:
-                    c.get(f'{self.rm_dir}/{self.filename}', self.localpath)
+                    c.get(f'{self.rm_dir}/{self.filename}', self.localpath) # the sftp server runs on linux -> do not change delimiter (slash)
         else:
             cnopts = pysftp.CnOpts()
             cnopts.hostkeys = None

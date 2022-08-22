@@ -1,3 +1,7 @@
+"""
+Author: Yanis Schärer, yanis.schaerer@swissnuclear.ch
+Date of current status: see README.txt
+"""
 import os
 import numpy as np
 import pandas as pd
@@ -115,7 +119,7 @@ class FileMaker:
         last_30_str = [f'{day.year}-{day.month:02d}-{day.day:02d}' for day in last_30]
 
         data = []
-        fnames = set([os.path.join('core','generation',f'{y}',f'{y}_{m:02d}_generation.csv') for y,m in last_30_ym])
+        fnames = set([os.path.join('core','generation',f'{y}',f'{y}_{m:02d}_generation.csv') for y,m in last_30_ym]) # get all necessary file names
         for fname in fnames:
             f_data = pd.read_csv(fname)
             data.extend([f_data[f_data['Date'].str.contains(date_str)] for date_str in last_30_str])
@@ -160,9 +164,9 @@ class FileMaker:
 
             plt.legend(loc=9, bbox_to_anchor=(0.5,0.99), ncol=5, frameon=False, columnspacing=3).set_zorder(35)
 
-            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.70,0.03), fontsize=10)
+            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.70,0.03), fontsize=10) # add copyright
 
-            imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE')
+            imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE') # add swissnuclear logo
             imgax.imshow(logo)
             imgax.axis('off')
 

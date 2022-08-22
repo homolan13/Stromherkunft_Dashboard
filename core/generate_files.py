@@ -1,3 +1,7 @@
+"""
+Author: Yanis Schärer, yanis.schaerer@swissnuclear.ch
+Date of current status: see README.txt
+"""
 import sys
 import os
 from datetime import datetime, timedelta
@@ -9,7 +13,7 @@ directories = {
     'export': 'Export',
     'base': ['Grafiken', 'Daten'], # order: plots, data files
     'layer1': ['01_Letzte30', '02_Monate', '03_Jahre', '04_Durchgehend'], # order: last 30 days, months, years, alltime
-    'layer2': ['DE', 'FR', 'EN']
+    'layer2': ['DE', 'FR', 'EN'] # order is not important in this layer
 }
 
 params = {
@@ -26,8 +30,8 @@ params = {
 }
 
 def main():
-    today = datetime.today() - timedelta(days=1) # real date
-    # today = datetime(2020,1,6) # custom date
+    # today = datetime.today() - timedelta(days=1) # real date
+    today = datetime(2020,1,6) # custom date
     print(f'\n{os.path.basename(__file__)} started at: {today.year}-{today.month:02d}-{today.day:02d} {today.hour:02d}:{today.minute:02d}:{today.second:02d}')
 
     fm = FileMaker(today, params)
