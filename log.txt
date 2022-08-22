@@ -1,0 +1,16 @@
+2022-08-22 15:50:13: Started import_data_entsoe.py...
+2022-08-22 15:50:47: Finished import_data_entsoe.py
+
+2022-08-22 15:50:48: Started generate_files.py...
+2022-08-22 15:50:48: -> convert_file executed
+2022-08-22 15:50:53: -> make_last30 executed
+2022-08-22 15:50:53: Finished generate_files.py
+
+2022-08-22 15:52:55: Started import_data_entsoe.py...
+2022-08-22 15:53:30: Finished import_data_entsoe.py
+
+2022-08-22 15:53:32: Started generate_files.py...
+2022-08-22 15:53:32: -> convert_file executed
+2022-08-22 15:53:36: -> make_last30 executed
+2022-08-22 15:53:36: Finished generate_files.py
+

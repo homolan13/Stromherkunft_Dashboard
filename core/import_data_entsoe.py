@@ -1,6 +1,6 @@
 """
 Author: Yanis Schärer, yanis.schaerer@swissnuclear.ch
-Date of current status: see README.txt
+As of: see README.txt
 """
 import sys
 import os
@@ -10,6 +10,7 @@ from copy import deepcopy
 from datetime import datetime, timedelta
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dep.FileHandlerLib import *
+from dep.to_log import to_log
 
 """
     host = 'sftp-transparency.entsoe.eu'
@@ -27,6 +28,8 @@ def date_to_str(_date: datetime):
     return f'{_date.year:04d}_{_date.month:02d}'
 
 def main():
+    to_log(f'Started {os.path.basename(__file__)}...')
+    
     today = datetime.today()
     print(f'\n{os.path.basename(__file__)} started at: {today.year}-{today.month:02d}-{today.day:02d} {today.hour:02d}:{today.minute:02d}:{today.second:02d}')
     # Check for missing files by looking for the newest one
@@ -117,6 +120,9 @@ def main():
         while today.month == today_check.month: # Add days until new month is reached
             today += timedelta(days=1)
         check_last_month = False # checking last month not necessary for following months
+
+    to_log(f'Finished {os.path.basename(__file__)}')
+    to_log('', no_time=True)
 
 if __name__ == '__main__':
     main()

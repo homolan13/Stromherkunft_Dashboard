@@ -1,6 +1,6 @@
 """
 Author: Yanis Schärer, yanis.schaerer@swissnuclear.ch
-Date of current status: see README.txt
+As of: see README.txt
 """
 import sys
 import os
@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from tqdm import tqdm
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dep.FileMaker import FileMaker
+from dep.to_log import to_log
 
 directories = {
     'export': 'Export',
@@ -30,8 +31,10 @@ params = {
 }
 
 def main():
-    # today = datetime.today() - timedelta(days=1) # real date
-    today = datetime(2022,1,6) # custom date
+    to_log(f'Started {os.path.basename(__file__)}...')
+
+    today = datetime.today() - timedelta(days=1) # real date
+    # today = datetime(2022,1,6) # custom date
     print(f'\n{os.path.basename(__file__)} started at: {today.year}-{today.month:02d}-{today.day:02d} {today.hour:02d}:{today.minute:02d}:{today.second:02d}')
 
     fm = FileMaker(today, params)
@@ -48,8 +51,12 @@ def main():
 
     for fun in tqdm(to_execute):
         fun()
+        to_log(f'-> {fun.__name__} executed')
 
     print('Files generated')
+
+    to_log(f'Finished {os.path.basename(__file__)}')
+    to_log('', no_time=True)
 
 if __name__ == '__main__':
     main()
