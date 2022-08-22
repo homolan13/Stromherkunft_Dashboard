@@ -12,7 +12,7 @@ from dep.FileMaker import FileMaker
 directories = {
     'export': 'Export',
     'base': ['Grafiken', 'Daten'], # order: plots, data files
-    'layer1': ['01_Letzte30', '02_Monate', '03_Jahre', '04_Durchgehend'], # order: last 30 days, months, years, alltime
+    'layer1': ['01_Letzte30', '02_Monate', '03_Jahre'], # order: last 30 days, months, years
     'layer2': ['DE', 'FR', 'EN'] # order is not important in this layer
 }
 
@@ -25,13 +25,13 @@ params = {
     'text': '#915500',
     'include_outages': False,
     'Planned': '#663c00', # Do not change key
-    'Forced': '#210900', # Do not change key
+    'Forced': 'k', # Do not change key
     'save_plot': True
 }
 
 def main():
     # today = datetime.today() - timedelta(days=1) # real date
-    today = datetime(2020,1,6) # custom date
+    today = datetime(2022,1,6) # custom date
     print(f'\n{os.path.basename(__file__)} started at: {today.year}-{today.month:02d}-{today.day:02d} {today.hour:02d}:{today.minute:02d}:{today.second:02d}')
 
     fm = FileMaker(today, params)
@@ -40,9 +40,9 @@ def main():
 
     to_execute = [fm.convert_file, fm.make_last30]
     if today.day == 6:
-        to_execute.extend([fm.make_month_series, fm.make_month_piebar])
+        to_execute.extend([fm.make_month_series, fm.make_month_distribution])
         if today.month == 1:
-            to_execute.extend([fm.make_year_series, fm.make_year_piebar])
+            to_execute.extend([fm.make_year_series, fm.make_year_distribution])
 
     print('\nGenerating files...')
 

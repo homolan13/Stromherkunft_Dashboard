@@ -14,7 +14,7 @@ class TextRepoDE:
         self.labels_load = 'Last'
         self.planned = 'Geplante Abschaltung'
         self.forced = 'Erzwungene Abschaltung'
-        self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_1$: Beznau 1', 'Beznau 2': r'$B_1$: Beznau 2'}
+        self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_{1/2}$: Beznau 1/2', 'Beznau 2': r'$B_{1/2}$: Beznau 1/2'}
         self.roundingerror = 'Mögliche Abweichungen resultieren aus Rundungsdifferenzen.'
         self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Datenquelle: Entso-E'
         self.month = {1: 'Januar', 2: 'Februar', 3: 'März', 4: 'April', 5: 'Mai', 6: 'Juni', 7: 'Juli', 8: 'August', 9: 'September', 10: 'Oktober', 11: 'November', 12: 'Dezember'}
@@ -41,7 +41,7 @@ class TextRepoDE:
                 self.title = f'Nettostromerzeugung in der Schweiz im Jahr {self.today.year}'
                 self.figname = os.path.join('DE', f'swissnuclear - Nettostromerzeugung CH {self.today.year} Zeitreihe - Entso-E.png')
 
-            case 'month_piebar':
+            case 'month_distribution':
                 self.title = f'Nettostromerzeugung in der Schweiz im {self.month[self.today.month]} {self.today.year}'
                 self.labels_pie_small = [f'Kernenergie CH', f'Andere']
                 self.labels_pie_large = [f'Kernenergie CH', f'Andere', f'Import']
@@ -51,7 +51,7 @@ class TextRepoDE:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2']
                 self.figname = os.path.join('DE', f'swissnuclear - Nettostromerzeugung CH {self.today.year}-{self.today.month:02d} Verteilung - Entso-E.png')
 
-            case 'year_piebar':
+            case 'year_distribution':
                 self.title = f'Nettostromerzeugung in der Schweiz im Jahr {self.today.year}'
                 self.labels_pie_small = [f'Kernenergie CH', f'Andere']
                 self.labels_pie_large = [f'Kernenergie CH', f'Andere', f'Import']
@@ -93,7 +93,7 @@ class TextRepoFR:
         self.labels_load = 'Charge'
         self.planned = 'Arrêt planifié'
         self.forced = 'Arrêt forcé'
-        self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_1$: Beznau 1', 'Beznau 2': r'$B_1$: Beznau 2'}
+        self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_{1/2}$: Beznau 1/2', 'Beznau 2': r'$B_{1/2}$: Beznau 1/2'}
         self.roundingerror = "Les écarts éventuels résultent de différences d'arrondi."
         self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Source: Entso-E'
         self.month = {1: 'Janvier', 2: 'Février', 3: 'Mars', 4: 'Avril', 5: 'Mai', 6: 'Juin', 7: 'Juillet', 8: 'Août', 9: 'Septembre', 10: 'Octobre', 11: 'Novembre', 12: 'Décembre'}
@@ -120,7 +120,7 @@ class TextRepoFR:
                 self.title = f"Production nette d'électricité en Suisse en {self.today.year}"
                 self.figname = os.path.join('FR', f'swissnuclear - Production nette delectricite CH {self.today.year} serie temporelle - Entso-E.png')
 
-            case 'month_piebar':
+            case 'month_distribution':
                 self.title = f"Production nette d'électricité en Suisse en {self.month[self.today.month]} {self.today.year}"
                 self.labels_pie_small = ['Énergie nucléaire CH', 'Autre']
                 self.labels_pie_large = ['Énergie nucléaire CH', 'Autre', 'Importation']
@@ -130,7 +130,7 @@ class TextRepoFR:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2']
                 self.figname = os.path.join('FR', f'swissnuclear - Production nette delectricite CH {self.today.year}-{self.today.month:02d} distribution - Entso-E.png')
 
-            case 'year_piebar':
+            case 'year_distribution':
                 self.title = f"Production nette d'électricité en Suisse en {self.today.year}"
                 self.labels_pie_small = ['Énergie nucléaire CH', 'Autre']
                 self.labels_pie_large = ['Énergie nucléaire CH', 'Autre', 'Importation']
@@ -172,7 +172,7 @@ class TextRepoEN:
         self.labels_load = 'Load'
         self.planned = 'Planned outage'
         self.forced = 'Forced outage'
-        self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_1$: Beznau 1', 'Beznau 2': r'$B_1$: Beznau 2'}
+        self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_{1/2}$: Beznau 1/2', 'Beznau 2': r'$B_{1/2}$: Beznau 1/2'}
         self.roundingerror = 'All sorts of deviations are due to rounding errors.'
         self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Source: Entso-E'
         self.month = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'Mai', 6: 'June', 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
@@ -199,7 +199,7 @@ class TextRepoEN:
                 self.title = f'Net electricity generation in Switzerland in {self.today.year}'
                 self.figname = os.path.join('EN', f'swissnuclear - Net electricity production CH {self.today.year} time series - Entso-E.png')
 
-            case 'month_piebar':
+            case 'month_distribution':
                 self.title = f'Net electricity generation in Switzerland in {self.month[self.today.month]} {self.today.year}'
                 self.labels_pie_small = [f'Nuclear energy CH', f'Other']
                 self.labels_pie_large = [f'Nuclear energy CH', f'Other', f'Import']
@@ -209,7 +209,7 @@ class TextRepoEN:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2']
                 self.figname = os.path.join('EN', f'swissnuclear - Net electricity production CH {self.today.year}-{self.today.month:02d} distribution - Entso-E.png')
 
-            case 'year_piebar':
+            case 'year_distribution':
                 self.title = f'Net electricity generation in Switzerland in {self.today.year}'
                 self.labels_pie_small = [f'Nuclear energy CH', f'Other']
                 self.labels_pie_large = [f'Nuclear energy CH', f'Other', f'Import']

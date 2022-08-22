@@ -320,11 +320,11 @@ class FileMaker:
                         plt.scatter(outage[1], outage[2], marker=outage[3], s=120, c=outage[4], clip_on=False, zorder=20)
                         if not planned:
                             if outage[4] == self.params['Planned']:
-                                plt.annotate(text_repo.planned, (outage[1]-4, outage[2]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                                plt.annotate(text_repo.planned, (outage[1]-40, outage[2]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
                                 planned = True
                         if not forced:
                             if outage[4] == self.params['Forced']:                
-                                plt.annotate(text_repo.forced, (outage[1]-4, outage[2]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                                plt.annotate(text_repo.forced, (outage[1]-40, outage[2]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
                                 forced = True
                     plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
 
@@ -372,7 +372,7 @@ class FileMaker:
                 fig.savefig(fname, dpi='figure', bbox_inches='tight', metadata={'Copyright':f'Swissnuclear, {today.year}', 'Author':'Yanis S.', 'Disclaimer':'Only allowed for private use. Contact Swissnuclear for more information.'})
             plt.close()
 
-    def make_month_piebar(self):
+    def make_month_distribution(self):
         today = self.today - timedelta(days=28)
 
         plt.rcParams['font.size'] = self.params['fontsize']+2
@@ -382,9 +382,9 @@ class FileMaker:
         path = os.path.join(d['export'], d['base'][0], d['layer1'][1])
 
         ### Initialize text repository
-        De = TextRepoDE('month_piebar', today)
-        Fr = TextRepoFR('month_piebar', today)
-        En = TextRepoEN('month_piebar', today)
+        De = TextRepoDE('month_distribution', today)
+        Fr = TextRepoFR('month_distribution', today)
+        En = TextRepoEN('month_distribution', today)
         text_repos = [De, Fr, En]
 
         ### Prepare data
@@ -473,7 +473,7 @@ class FileMaker:
                 fig.savefig(fname, dpi='figure', bbox_inches='tight', metadata={'Copyright':f'Swissnuclear, {today.year}', 'Author':'Yanis S.', 'Disclaimer':'Only allowed for private use. Contact Swissnuclear for more information.'})
             plt.close()
 
-    def make_year_piebar(self):
+    def make_year_distribution(self):
         today = self.today - timedelta(days=365)
 
         plt.rcParams['font.size'] = self.params['fontsize']+2
@@ -482,9 +482,9 @@ class FileMaker:
         path = os.path.join(d['export'], d['base'][0], d['layer1'][2])
 
         ### Initialize text repository
-        De = TextRepoDE('year_piebar', today)
-        Fr = TextRepoFR('year_piebar', today)
-        En = TextRepoEN('year_piebar', today)
+        De = TextRepoDE('year_distribution', today)
+        Fr = TextRepoFR('year_distribution', today)
+        En = TextRepoEN('year_distribution', today)
         text_repos = [De, Fr, En]
 
         ### Prepare data
@@ -585,12 +585,6 @@ class FileMaker:
         if today.day < 5 or today.day == 15:
             loops += 1
 
-        # Initialize text repositories
-        De = TextRepoDE('datafile', today)
-        Fr = TextRepoFR('datafile', today)
-        En = TextRepoEN('datafile', today)
-        text_repos = [De, Fr, En]
-
         # Convert data
         for _ in range(loops):
             original_file = os.path.join('core','generation', f'{today.year}', f'{today.year}_{today.month:02d}_generation.csv')
@@ -604,6 +598,12 @@ class FileMaker:
             order = ['Date', 'Time', 'Load', 'Nuclear', 'Goesgen', 'Leibstadt', 'Muehleberg', 'Beznau 1', 'Beznau 2', 'Import+/Export-', 'Other'] # drops not mentioned automatically
             data = data[order]
             data = data.round({'Other': 1, 'Import+/Export-': 1})
+
+            # Initialize text repositories
+            De = TextRepoDE('datafile', today)
+            Fr = TextRepoFR('datafile', today)
+            En = TextRepoEN('datafile', today)
+            text_repos = [De, Fr, En]
 
             for text_repo in text_repos:
                 data.to_csv(os.path.join(dirs['export'], dirs['base'][1], text_repo.filename), index=False)
