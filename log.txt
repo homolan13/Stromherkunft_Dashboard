@@ -14,3 +14,11 @@
 2022-08-22 15:53:36: -> make_last30 executed
 2022-08-22 15:53:36: Finished generate_files.py
 
+2022-08-22 15:57:53: Started import_data_entsoe.py...
+2022-08-22 15:58:36: Finished import_data_entsoe.py
+
+2022-08-22 15:58:39: Started generate_files.py...
+2022-08-22 15:58:39: -> convert_file executed
+2022-08-22 15:58:47: -> make_last30 executed
+2022-08-22 15:58:47: Finished generate_files.py
+
