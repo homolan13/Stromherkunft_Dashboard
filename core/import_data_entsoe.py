@@ -24,6 +24,7 @@ def date_to_str(_date: datetime):
 
 def main():
     today = datetime.today()
+    print(f'\n{os.path.basename(__file__)} started at: {today.year}-{today.month:02d}-{today.day:02d} {today.hour:02d}:{today.minute:02d}:{today.second:02d}')
     # Check for missing files by looking for the newest one
     y = max([int(fname) for fname in os.listdir(os.path.join('core','generation'))])
     m = max([int(fname[5:7]) for fname in os.listdir(os.path.join('core','generation',str(y)))])

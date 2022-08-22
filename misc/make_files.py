@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.patches import ConnectionPatch
 from datetime import datetime, timedelta
-from TextRepositories import *
+from dep.TextRepositories import *
 
 def _get_outages(today: datetime, data: pd.DataFrame, params: dict):
     return_list = [] # one entry: (x, y, marker, color)
@@ -539,8 +539,10 @@ def make_year_piebar(today: datetime, params: dict):
             fig.savefig(fname, dpi='figure', bbox_inches='tight', metadata={'Copyright':f'Swissnuclear, {today.year}', 'Author':'Yanis S.', 'Disclaimer':'Only allowed for private use. Contact Swissnuclear for more information.'})
         plt.close()
 
-def make_piebar_alltime(today: datetime, params: dict):
-    plt.rcParams['font.size'] = params['fontsize']+6
+def _make_alltime_piebar(today: datetime, params: dict): ### is not in use anymore and outdated. Attention: bar labels are faulty
+    today = today
+
+    plt.rcParams['font.size'] = params['fontsize']+2
     plt.rcParams['font.family'] = params['fontfamily']
     d = params['directories']
     path = os.path.join(d['export'], d['base'][0], d['layer1'][3])
@@ -553,7 +555,7 @@ def make_piebar_alltime(today: datetime, params: dict):
     text_repos = [De, Fr, En]
 
     ### Prepare data
-    base = 'generation'
+    base = os.path.join('core','generation')
     years = os.listdir(base)
     years.remove(str(datetime.today().year))
     data = {y: {m: None for m in months} for y in years}
@@ -572,7 +574,7 @@ def make_piebar_alltime(today: datetime, params: dict):
             monthly_avg[m]['FlowValue'] = 0
 
     ### Create figures
-    logo = plt.imread('swissnuclear logo.png')
+    logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
     for text_repo in text_repos:
         for m, v in monthly_avg.items():
             fig, (ax1, ax2) = plt.subplots(1,2,figsize=(22,10))
@@ -584,20 +586,21 @@ def make_piebar_alltime(today: datetime, params: dict):
                 pie_ratios = [v['Nuclear'], v['Rest']] / (v['TotalLoadValue']+v['Nuclear'])
                 explode = [0.1, 0]
                 angle = -225*pie_ratios[0]
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.0f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=['#e69624', '#C8C8C8'])
+                wedges, *_ = ax1.pie(pie_ratios, autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=['#e69624', '#C8C8C8'])
             else:
-                pie_ratios = [v['Nuclear'], v['FlowValue'], v['Rest']] / (v['TotalLoadValue']+v['FlowValue']+v['Nuclear'])
+                pie_ratios = [v['Nuclear'], v['Rest'], v['FlowValue']] / (v['TotalLoadValue']+v['FlowValue']+v['Nuclear'])
                 explode = [0.1, 0, 0]
                 angle = -225*pie_ratios[0]
-                wedges, *_ = ax1.pie(pie_ratios, autopct='%1.0f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=['#e69624', '#7a1b1f', '#C8C8C8'])
+                wedges, *_ = ax1.pie(pie_ratios, autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=['#e69624', '#C8C8C8', '#7a1b1f'])
 
             # bar chart
-            bar_ratios = [v['Kernkraftwerk Gösgen'], v['Leibstadt'], v['Beznau 1'], v['Beznau 2'], v['KKM Produktion']] / v['Nuclear']
+            bar_ratios = [v[unit] for unit in ['Kernkraftwerk Gösgen', 'Leibstadt', 'Mühleberg', 'Beznau 1', 'Beznau 2']] / v['Nuclear']
             bottom, width = 1, 0.1
             for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                 bottom -= height
                 bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.2*j)
-                ax2.bar_label(bc, labels=[f'{height:.0%}'], label_type='center')
+                pct = pie_ratios[0]*height
+                ax2.bar_label(bc, labels=[f'{pct:.1%}'], label_type='center')
             ax2.legend(loc=7)
             ax2.axis('off')
             ax2.set_xlim(- 2 * width, 3 * width)
@@ -620,6 +623,7 @@ def make_piebar_alltime(today: datetime, params: dict):
             ax2.add_artist(con)
             con.set_linewidth(2)
 
+            plt.annotate(text_repo.roundingerror, xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
             plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.62,0.03), fontsize=10)
 
             imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE')

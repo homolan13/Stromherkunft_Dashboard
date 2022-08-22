@@ -78,6 +78,7 @@ class FileMaker:
         return unit_idx
         
     def make_dirs(self):
+        """ Makes necessary directories if not already existing """
         dirs = self.params['directories']
         for l1 in dirs['layer1']:
             for l2 in dirs['layer2']:
@@ -110,12 +111,12 @@ class FileMaker:
 
         ### Prepare data
         last_30 = [today - timedelta(days=i) for i in range(30)]
-        last_30_my = set([(day.year, day.month) for day in last_30])
+        last_30_ym = set([(day.year, day.month) for day in last_30])
         last_30_str = [f'{day.year}-{day.month:02d}-{day.day:02d}' for day in last_30]
 
         data = []
-        for my in last_30_my:
-            fname = os.path.join('core','generation',f'{my[0]}',f'{my[0]}_{my[1]:02d}_generation.csv')
+        fnames = set([os.path.join('core','generation',f'{y}',f'{y}_{m:02d}_generation.csv') for y,m in last_30_ym])
+        for fname in fnames:
             f_data = pd.read_csv(fname)
             data.extend([f_data[f_data['Date'].str.contains(date_str)] for date_str in last_30_str])
         data = pd.concat(data, axis=0)
@@ -409,12 +410,12 @@ class FileMaker:
                 pie_ratios = sums[:2]/sum(sums)
                 explode = [0.1, 0]
                 angle = -225*pie_ratios[0]
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.0f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=['#e69624', '#C8C8C8'])
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=['#e69624', '#C8C8C8'])
             else:
                 pie_ratios = sums/sum(sums)
                 explode = [0.1, 0, 0]
                 angle = -225*pie_ratios[0]
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.0f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=['#e69624', '#C8C8C8', '#7a1b1f'])
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=['#e69624', '#C8C8C8', '#7a1b1f'])
 
             # bar chart
             if today.year < 2020:
@@ -424,7 +425,7 @@ class FileMaker:
                     bottom -= height
                     bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.2*j)
                     pct = pie_ratios[0]*height
-                    ax2.bar_label(bc, labels=[f'{pct:.0%}'], label_type='center')
+                    ax2.bar_label(bc, labels=[f'{pct:.1%}'], label_type='center')
             else:
                 bar_ratios = [data[unit].sum() for unit in self.units if unit != 'KKM Produktion'] / data['Nuclear'].sum()
                 bottom, width = 1, 0.1
@@ -432,7 +433,7 @@ class FileMaker:
                     bottom -= height
                     bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.25*j)
                     pct = pie_ratios[0]*height
-                    ax2.bar_label(bc, labels=[f'{pct:.0%}'], label_type='center')
+                    ax2.bar_label(bc, labels=[f'{pct:.1%}'], label_type='center')
                 
             ax2.legend(loc=7)
             ax2.axis('off')
@@ -512,12 +513,12 @@ class FileMaker:
                 pie_ratios = sums[:2]/sum(sums)
                 explode = [0.1, 0]
                 angle = -225*pie_ratios[0]
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.0f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=['#e69624', '#C8C8C8'])
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=['#e69624', '#C8C8C8'])
             else:
                 pie_ratios = sums/sum(sums)
                 explode = [0.1, 0, 0]
                 angle = -225*pie_ratios[0]
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.0f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=['#e69624', '#C8C8C8', '#7a1b1f'])
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=['#e69624', '#C8C8C8', '#7a1b1f'])
 
             # bar chart
             if today.year < 2020:
@@ -527,7 +528,7 @@ class FileMaker:
                     bottom -= height
                     bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.2*j)
                     pct = pie_ratios[0]*height
-                    ax2.bar_label(bc, labels=[f'{pct:.0%}'], label_type='center')
+                    ax2.bar_label(bc, labels=[f'{pct:.1%}'], label_type='center')
 
             else:
                 bar_ratios = [data[unit].sum() for unit in self.units if unit != 'KKM Produktion'] / data['Nuclear'].sum()
@@ -536,7 +537,7 @@ class FileMaker:
                     bottom -= height
                     bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.25*j)
                     pct = pie_ratios[0]*height
-                    ax2.bar_label(bc, labels=[f'{pct:.0%}'], label_type='center')
+                    ax2.bar_label(bc, labels=[f'{pct:.1%}'], label_type='center')
                 
             ax2.legend(loc=7)
             ax2.axis('off')
@@ -571,102 +572,6 @@ class FileMaker:
                 fname = os.path.join(path, text_repo.figname)
                 fig.savefig(fname, dpi='figure', bbox_inches='tight', metadata={'Copyright':f'Swissnuclear, {today.year}', 'Author':'Yanis S.', 'Disclaimer':'Only allowed for private use. Contact Swissnuclear for more information.'})
             plt.close()
-
-    def make_alltime_piebar(self):
-        today = self.today
-
-        plt.rcParams['font.size'] = self.params['fontsize']+2
-        plt.rcParams['font.family'] = self.params['fontfamily']
-        d = self.params['directories']
-        path = os.path.join(d['export'], d['base'][0], d['layer1'][3])
-        months = list(range(1,13))
-
-        ### Initialize text repository
-        De = TextRepoDE('alltime_piebar', today)
-        Fr = TextRepoFR('alltime_piebar', today)
-        En = TextRepoEN('alltime_piebar', today)
-        text_repos = [De, Fr, En]
-
-        ### Prepare data
-        base = os.path.join('core','generation')
-        years = os.listdir(base)
-        years.remove(str(datetime.today().year))
-        data = {y: {m: None for m in months} for y in years}
-        for y in years:
-            for i, f in enumerate(os.listdir(os.path.join(base, y))):
-                data[y][i+1] = pd.read_csv(os.path.join(base,y,f))
-                data[y][i+1].insert(len(data[y][i+1].columns), 'Rest', data[y][i+1]['TotalLoadValue'] - data[y][i+1]['Nuclear'] - data[y][i+1]['FlowValue'])
-        monthly_avg = {m: None for m in months}
-        for m in months:
-            month_data = []
-            for y in years:
-                month_data.append(data[y][m])
-            month_data = pd.concat(month_data, axis=0)
-            monthly_avg[m] = month_data.mean(axis=0, numeric_only=True)
-            if monthly_avg[m]['FlowValue'] < 0:
-                monthly_avg[m]['FlowValue'] = 0
-
-        ### Create figures
-        logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
-        for text_repo in text_repos:
-            for m, v in monthly_avg.items():
-                fig, (ax1, ax2) = plt.subplots(1,2,figsize=(22,10))
-                fig.subplots_adjust(wspace=0)
-                fig.suptitle(text_repo.title[m-1], fontsize=34)
-
-                # pie chart
-                if v['FlowValue'] == 0:
-                    pie_ratios = [v['Nuclear'], v['Rest']] / (v['TotalLoadValue']+v['Nuclear'])
-                    explode = [0.1, 0]
-                    angle = -225*pie_ratios[0]
-                    wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.0f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=['#e69624', '#C8C8C8'])
-                else:
-                    pie_ratios = [v['Nuclear'], v['FlowValue'], v['Rest']] / (v['TotalLoadValue']+v['FlowValue']+v['Nuclear'])
-                    explode = [0.1, 0, 0]
-                    angle = -225*pie_ratios[0]
-                    wedges, *_ = ax1.pie(pie_ratios, autopct='%1.0f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=['#e69624', '#7a1b1f', '#C8C8C8'])
-
-                # bar chart
-                bar_ratios = [v[unit] for unit in self.units] / v['Nuclear']
-                bottom, width = 1, 0.1
-                for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
-                    bottom -= height
-                    bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.2*j)
-                    pct = pie_ratios[0]*height
-                    ax2.bar_label(bc, labels=[f'{pct:.0%}'], label_type='center')
-                ax2.legend(loc=7)
-                ax2.axis('off')
-                ax2.set_xlim(- 2 * width, 3 * width)
-
-                theta1, theta2 = wedges[0].theta1, wedges[0].theta2
-                center, r = wedges[0].center, wedges[0].r
-                bar_height = sum(bar_ratios)
-                x = r * np.cos(np.pi / 180 * theta2) + center[0]
-                y = r * np.sin(np.pi / 180 * theta2) + center[1]
-                con = ConnectionPatch(xyA=(-width / 2, bar_height), coordsA=ax2.transData,
-                                    xyB=(x, y), coordsB=ax1.transData)
-                con.set_color('#e69624')
-                con.set_linewidth(2)
-                ax2.add_artist(con)
-                x = r * np.cos(np.pi / 180 * theta1) + center[0]
-                y = r * np.sin(np.pi / 180 * theta1) + center[1]
-                con = ConnectionPatch(xyA=(-width / 2, 0), coordsA=ax2.transData,
-                                    xyB=(x, y), coordsB=ax1.transData)
-                con.set_color('#e69624')
-                ax2.add_artist(con)
-                con.set_linewidth(2)
-
-                plt.annotate(text_repo.roundingerror, xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
-                plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.62,0.03), fontsize=10)
-
-                imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE')
-                imgax.imshow(logo)
-                imgax.axis('off')
-
-                if self.params['save_plot']:
-                    fname = os.path.join(path, text_repo.figname[m-1])
-                    fig.savefig(fname, dpi='figure', bbox_inches='tight', metadata={'Copyright':f'Swissnuclear, {today.year}', 'Author':'Yanis S.', 'Disclaimer':'Only allowed for private use. Contact Swissnuclear for more information.'})
-                plt.close()
 
     def convert_file(self):
         today = self.today

@@ -60,7 +60,7 @@ class TextRepoDE:
             case 'alltime_piebar':
                 self.title = [f'Monatsdurchschnitt Nettostromerzeugung\nim {self.month[m]} seit 2017' for m in range(1,13)]
                 self.labels_pie_small = [f'Kernenergie CH', f'Andere']
-                self.labels_pie_large = [f'Kernenergie CH', f'Import', f'Andere']
+                self.labels_pie_large = [f'Kernenergie CH', f'Andere', f'Import']
                 self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 self.figname = [os.path.join('DE', f'swissnuclear - Monatsdurchschnitt Nettostromerzeugung CH {m:02d} - Entso-E.png') for m in range(1,13)]
 
@@ -119,7 +119,7 @@ class TextRepoFR:
             case 'month_piebar':
                 self.title = f"Production nette d'électricité en Suisse en {self.month[self.today.month]} {self.today.year}"
                 self.labels_pie_small = ['Énergie nucléaire CH', 'Autre']
-                self.labels_pie_large = ['Énergie nucléaire CH', 'Importation', 'Autre']
+                self.labels_pie_large = ['Énergie nucléaire CH', 'Autre', 'Importation']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -129,7 +129,7 @@ class TextRepoFR:
             case 'year_piebar':
                 self.title = f"Production nette d'électricité en Suisse en {self.today.year}"
                 self.labels_pie_small = ['Énergie nucléaire CH', 'Autre']
-                self.labels_pie_large = ['Énergie nucléaire CH', 'Importation', 'Autre']
+                self.labels_pie_large = ['Énergie nucléaire CH', 'Autre', 'Importation']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -139,7 +139,7 @@ class TextRepoFR:
             case 'alltime_piebar':
                 self.title = [f"Moyenne mensuelle de la production nette d'électricité\nen {self.month[m]} depuis 2017" for m in range(1,13)]
                 self.labels_pie_small = ['Énergie nucléaire CH', 'Autre']
-                self.labels_pie_large = ['Énergie nucléaire CH', 'Importation', 'Autre']
+                self.labels_pie_large = ['Énergie nucléaire CH', 'Autre', 'Importation']
                 self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 self.figname = [os.path.join('FR', f"swissnuclear - Moyenne mensuelle de la production nette delectricite CH {m:02d} - Entso-E.png") for m in range(1,13)]
 
@@ -164,7 +164,7 @@ class TextRepoEN:
         self.figtype = figtype
         self.today = today
         self.ylabel = 'Power [MW]'
-        self.labels_stack = ['nuclear energy CH', 'Other', 'Import', 'Export']
+        self.labels_stack = ['Nuclear energy CH', 'Other', 'Import', 'Export']
         self.labels_load = 'Load'
         self.planned = 'Planned outage'
         self.forced = 'Forced outage'
@@ -193,12 +193,12 @@ class TextRepoEN:
 
             case 'year_series':
                 self.title = f'Net electricity generation in Switzerland in {self.today.year}'
-                self.figname = os.path.join('EN', f'swissnuclear - Net electricity production CH {self.today.year} - Entso-E.png')
+                self.figname = os.path.join('EN', f'swissnuclear - Net electricity production CH {self.today.year} time series - Entso-E.png')
 
             case 'month_piebar':
                 self.title = f'Net electricity generation in Switzerland in {self.month[self.today.month]} {self.today.year}'
-                self.labels_pie_small = [f'nuclear energy CH', f'Other']
-                self.labels_pie_large = [f'nuclear energy CH', f'Import', f'Other']
+                self.labels_pie_small = [f'Nuclear energy CH', f'Other']
+                self.labels_pie_large = [f'Nuclear energy CH', f'Other', f'Import']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -207,8 +207,8 @@ class TextRepoEN:
 
             case 'year_piebar':
                 self.title = f'Net electricity generation in Switzerland in {self.today.year}'
-                self.labels_pie_small = [f'nuclear energy CH', f'Other']
-                self.labels_pie_large = [f'nuclear energy CH', f'Import', f'Other']
+                self.labels_pie_small = [f'Nuclear energy CH', f'Other']
+                self.labels_pie_large = [f'Nuclear energy CH', f'Other', f'Import']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -217,19 +217,19 @@ class TextRepoEN:
                 
             case 'alltime_piebar':
                 self.title = [f'Monthly average net electricity generation\nin {self.month[m]} since 2017' for m in range(1,13)]
-                self.labels_pie_small = [f'nuclear energy CH', f'Other']
-                self.labels_pie_large = [f'nuclear energy CH', f'Import', f'Other']
+                self.labels_pie_small = [f'Nuclear energy CH', f'Other']
+                self.labels_pie_large = [f'Nuclear energy CH', f'Other', f'Import']
                 self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 self.figname = [os.path.join('EN', f'swissnuclear - Monthly average net electricity generation CH {m:02d} - Entso-E.png') for m in range(1,13)]
 
             case 'line': ### not in use anymore
                 self.title = 'Annual average of net electricity generation'
-                self.labels_line = [f'nuclear energy CH', f'Import', f'Other']
+                self.labels_line = [f'Nuclear energy CH', f'Import', f'Other']
                 self.figname = os.path.join('EN', 'swissnuclear - Annual average net electricity generation CH - Entso-E.png')
             
             case 'boxplot': ### not in use anymore
                 self.title = f'Distribution of net electricity generation by\ntechnology since Jan. 2017 (as of {self.month_abbr[datetime.today().month]} {datetime.today().day}, {datetime.today().year})'
-                self.xticks = ['nuclear energy CH', 'Other']
+                self.xticks = ['Nuclear energy CH', 'Other']
                 self.figname = os.path.join('EN', 'swissnuclear - Distribution of net electricity generation CH - Entso-E.png')
 
             case 'datafile':

@@ -5,9 +5,6 @@ from tqdm import tqdm
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dep.FileMaker import FileMaker
 
-# today = datetime.today() - timedelta(days=1) # real date
-today = datetime(2020,1,6) # custom date
-
 directories = {
     'export': 'Export',
     'base': ['Grafiken', 'Daten'], # order: plots, data files
@@ -29,6 +26,10 @@ params = {
 }
 
 def main():
+    today = datetime.today() - timedelta(days=1) # real date
+    # today = datetime(2020,1,6) # custom date
+    print(f'\n{os.path.basename(__file__)} started at: {today.year}-{today.month:02d}-{today.day:02d} {today.hour:02d}:{today.minute:02d}:{today.second:02d}')
+
     fm = FileMaker(today, params)
 
     fm.make_dirs()
@@ -37,7 +38,7 @@ def main():
     if today.day == 6:
         to_execute.extend([fm.make_month_series, fm.make_month_piebar])
         if today.month == 1:
-            to_execute.extend([fm.make_year_series, fm.make_year_piebar, fm.make_alltime_piebar])
+            to_execute.extend([fm.make_year_series, fm.make_year_piebar])
 
     print('\nGenerating files...')
 
