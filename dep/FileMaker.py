@@ -24,6 +24,7 @@ class FileMaker:
         history = {k:[] for k in self.units} # values are of type ('planned/forced', idx)
 
         outages = pd.read_csv(os.path.join('core', 'outages',f'{today.year}_outages.csv'))
+        outages = outages[outages['Type'] == 'Forced'] # keep forced outages only
         for _, outage in outages.iterrows():
             x1 = outage['StartDate']
             x2 = outage['StartTime'][:2]
@@ -38,7 +39,7 @@ class FileMaker:
             history[outage['UnitName']] = history[outage['UnitName']] + [start_idx+k for k in range(5*24)] # update captured outages
             
             idx = self.units.index(outage['UnitName'])
-            return_list.append((outage['UnitName'], start_idx, np.sum(np.array([data[self.units[unit]][start_idx] for unit in range(idx+1)]), axis=0), marker_type[outage['UnitName']], self.params[outage['Type']]))
+            return_list.append((outage['UnitName'], start_idx, np.sum(np.array([data[self.units[unit]][start_idx] for unit in range(idx+1)]), axis=0), marker_type[outage['UnitName']]))
 
         return return_list
 
@@ -132,10 +133,10 @@ class FileMaker:
         data['Export'] = [-flow_value if flow_value < 0 else 0 for flow_value in data['FlowValue']]
         data.drop(columns='FlowValue', inplace=True)
 
-        rest = [load - nuc - imp if load - nuc - imp > 0 else 0 for load, nuc, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Import'])]
+        rest = [load - nuc - sol - imp if load - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'])]
         ticks = [f'{d[-3:-1]}.{d[5:7]}.' for d in data['Date']]
 
-        y = np.array([data['Nuclear'], rest, data['Import'], data['Export']])
+        y = np.array([data['Nuclear'], rest, data['Solar'], data['Import'], data['Export']])
         stack_max = max(np.sum(y, axis=0))
 
         ### Create figures
@@ -162,7 +163,7 @@ class FileMaker:
             ax.tick_params(axis='y', length=0, pad=15)
             ax.tick_params(axis='x', direction='in', length=0, color='dimgrey', pad=15)
 
-            plt.legend(loc=9, bbox_to_anchor=(0.5,0.99), ncol=5, frameon=False, columnspacing=3).set_zorder(35)
+            plt.legend(loc=9, bbox_to_anchor=(0.5,0.99), ncol=len(text_repo.labels_stack)+1, frameon=False, columnspacing=2).set_zorder(35)
 
             plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.70,0.03), fontsize=10) # add copyright
 
@@ -201,7 +202,7 @@ class FileMaker:
         data['Export'] = [-flow_value if flow_value < 0 else 0 for flow_value in data['FlowValue']]
         data.drop(columns='FlowValue', inplace=True)
 
-        rest = [load - nuc - imp if load - nuc - imp > 0 else 0 for load, nuc, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Import'])]
+        rest = [load - nuc - sol - imp if load - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'])]
         ticks = [f'{d[-3:-1]}.{d[5:7]}.' for d in data['Date']]
 
         ### Create figures
@@ -213,30 +214,25 @@ class FileMaker:
             outage_idx = []
             if self.params['include_outages']:
                 outages = self._get_outages(data, today)
-                planned, forced = False, False
+                annotated = True
                 if outages:
                     outage_legend = set()
                     for outage in outages:
                         outage_legend.add(text_repo.outage_annotations[outage[0]])
                         outage_idx.append(outage[1])
-                        plt.scatter(outage[1], outage[2], marker=outage[3], s=120, c=outage[4], clip_on=False, zorder=20)
-                        if not planned:
-                            if outage[4] == self.params['Planned']:
-                                plt.annotate(text_repo.planned, (outage[1]-4, outage[2]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
-                                planned = True
-                        if not forced:
-                            if outage[4] == self.params['Forced']:                
-                                plt.annotate(text_repo.forced, (outage[1]-4, outage[2]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
-                                forced = True
+                        plt.scatter(outage[1], outage[2], marker=outage[3], s=120, c=self.params['color_outages'], clip_on=False, zorder=20)
+                        if annotated:
+                            plt.annotate(text_repo.outage_annotated, (outage[1]-4, outage[2]+500), color=self.params['color_outages'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                            annotated = False
                     plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
 
             annotation_idx = self._csp(data, outage_idx, 50)
-            y = np.array([data['Nuclear'], rest, data['Import'], data['Export']])
+            y = np.array([data['Nuclear'], rest, data['Solar'], data['Import'], data['Export']])
             plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap'], labels=text_repo.labels_stack, zorder=10)
             accumulated = pd.concat([data[unit] for unit in self.units], axis=1).cumsum(axis=1)
             for unit, idx in annotation_idx.items():
                 if idx is not None:
-                    plt.plot(range(0,len(data.index)), accumulated[unit], color=self.params['line'], lw=0.5, zorder=12)
+                    plt.plot(range(0,len(data.index)), accumulated[unit], color=self.params['line'], lw=1.5, zorder=12)
                     plt.scatter(idx, accumulated[unit].iloc[idx], c=self.params['text'], s=50, zorder=13, clip_on=False)
                     plt.annotate(self.names_dict[unit], xy=(idx, accumulated[unit].iloc[idx]+300), color=self.params['text'], fontsize=14, ha='center', va='center', annotation_clip=False, zorder=14)
 
@@ -258,7 +254,7 @@ class FileMaker:
             ax.tick_params(axis='y', length=0, pad=15)
             ax.tick_params(axis='x', direction='in', length=0, color='dimgrey', pad=15)
 
-            plt.legend(loc=9, bbox_to_anchor=(0.5,0.99), ncol=5, frameon=False, columnspacing=3).set_zorder(35)          
+            plt.legend(loc=9, bbox_to_anchor=(0.5,0.99), ncol=len(text_repo.labels_stack)+1, frameon=False, columnspacing=2).set_zorder(35)          
 
             plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.70,0.03), fontsize=10)
 
@@ -299,7 +295,7 @@ class FileMaker:
         data['Export'] = [-flow_value if flow_value < 0 else 0 for flow_value in data['FlowValue']]
         data.drop(columns='FlowValue', inplace=True)
 
-        rest = [load - nuc - imp if load - nuc - imp > 0 else 0 for load, nuc, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Import'])]
+        rest = [load - nuc - sol - imp if load - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'])]
         ticks = [f'{d[-3:-1]}.{d[5:7]}.' for d in data['Date']]
 
         ### Create figures
@@ -311,30 +307,25 @@ class FileMaker:
             outage_idx = []
             if self.params['include_outages']:
                 outages = self._get_outages(data, today)
-                planned, forced = False, False
+                annotated = True
                 if outages:
                     outage_legend = set()
                     for outage in outages:
                         outage_legend.add(text_repo.outage_annotations[outage[0]])
                         outage_idx.append(outage[1])
-                        plt.scatter(outage[1], outage[2], marker=outage[3], s=120, c=outage[4], clip_on=False, zorder=20)
-                        if not planned:
-                            if outage[4] == self.params['Planned']:
-                                plt.annotate(text_repo.planned, (outage[1]-40, outage[2]+500), color=self.params['Planned'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
-                                planned = True
-                        if not forced:
-                            if outage[4] == self.params['Forced']:                
-                                plt.annotate(text_repo.forced, (outage[1]-40, outage[2]+500), color=self.params['Forced'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
-                                forced = True
+                        plt.scatter(outage[1], outage[2], marker=outage[3], s=120, c=self.params['color_outages'], clip_on=False, zorder=20)
+                        if annotated:
+                            plt.annotate(text_repo.outage_annotated, (outage[1]-40, outage[2]+500), color=self.params['color_outages'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
+                            annotated = False
                     plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
 
             annotation_idx = self._csp(data, outage_idx, 500)
-            y = np.array([data['Nuclear'], rest, data['Import'], data['Export']])
+            y = np.array([data['Nuclear'], rest, data['Solar'], data['Import'], data['Export']])
             plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap'], labels=text_repo.labels_stack, zorder=10)
             accumulated = pd.concat([data[unit] for unit in self.units], axis=1).cumsum(axis=1)
             for unit, idx in annotation_idx.items():
                 if idx is not None:
-                    plt.plot(range(0,len(data.index)), accumulated[unit], color=self.params['line'], lw=0.5, zorder=12)
+                    plt.plot(range(0,len(data.index)), accumulated[unit], color=self.params['line'], lw=1.5, zorder=12)
                     plt.scatter(idx, accumulated[unit].iloc[idx], c=self.params['text'], s=50, zorder=13, clip_on=False)
                     plt.annotate(self.names_dict[unit], xy=(idx, accumulated[unit].iloc[idx]+300), color=self.params['text'], fontsize=14, ha='center', va='center', annotation_clip=False, zorder=14)
             
@@ -359,7 +350,7 @@ class FileMaker:
             ax.tick_params(axis='y', length=0, pad=15)
             ax.tick_params(axis='x', direction='in', length=10, color='dimgrey', pad=15)
 
-            plt.legend(loc=9, bbox_to_anchor=(0.5,0.99), ncol=5, frameon=False, columnspacing=3).set_zorder(35)               
+            plt.legend(loc=9, bbox_to_anchor=(0.5,0.99), ncol=len(text_repo.labels_stack)+1, frameon=False, columnspacing=2).set_zorder(35)               
 
             plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.70,0.03), fontsize=10)
 
@@ -397,10 +388,10 @@ class FileMaker:
         data['Import'] = [flow_value if flow_value > 0 else 0 for flow_value in data['FlowValue']]
         data['Export'] = [-flow_value if flow_value < 0 else 0 for flow_value in data['FlowValue']]
         data.drop(columns='FlowValue', inplace=True)
-        rest = [load - nuc - imp if load - nuc - imp > 0 else 0 for load, nuc, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Import'])]
+        rest = [load - nuc - sol - imp if load - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'])]
         data.insert(5, 'Rest', rest)
 
-        sums = [data['Nuclear'].sum(), data['Rest'].sum(), data['Import'].sum()]
+        sums = [data['Nuclear'].sum(), data['Rest'].sum(), data['Solar'].sum(), data['Import'].sum()]
 
         ### Create figures
         logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
@@ -410,16 +401,16 @@ class FileMaker:
             fig.suptitle(text_repo.title, fontsize=34)
 
             # pie chart
-            if sums[2] == 0: # import is 0
-                pie_ratios = sums[:2]/sum(sums)
-                explode = [0.1, 0]
-                angle = -225*pie_ratios[0]
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=['#e69624', '#C8C8C8'])
+            if sums[-1] == 0: # import is 0
+                pie_ratios = sums[:-1]/sum(sums)
+                explode = [0.1] + (len(sums)-2)*[0]
+                angle = 360*(1-pie_ratios[0]/2) # 0° is start --> (counter-clockwise) 360° - half of important slice
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=self.params['colormap'][:-2])
             else:
                 pie_ratios = sums/sum(sums)
-                explode = [0.1, 0, 0]
-                angle = -225*pie_ratios[0]
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=['#e69624', '#C8C8C8', '#7a1b1f'])
+                explode = [0.1] + (len(sums)-1)*[0]
+                angle = 360*(1-pie_ratios[0]/2)
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=self.params['colormap'][:-1])
 
             # bar chart
             if today.year < 2020:
@@ -427,7 +418,7 @@ class FileMaker:
                 bottom, width = 1, 0.1
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
-                    bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.2*j)
+                    bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.2+0.2*j)
                     pct = pie_ratios[0]*height
                     ax2.bar_label(bc, labels=[f'{pct:.1%}'], label_type='center')
             else:
@@ -435,7 +426,7 @@ class FileMaker:
                 bottom, width = 1, 0.1
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
-                    bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.25*j)
+                    bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.25+0.25*j)
                     pct = pie_ratios[0]*height
                     ax2.bar_label(bc, labels=[f'{pct:.1%}'], label_type='center')
                 
@@ -500,10 +491,10 @@ class FileMaker:
         data['Import'] = [flow_value if flow_value > 0 else 0 for flow_value in data['FlowValue']]
         data['Export'] = [-flow_value if flow_value < 0 else 0 for flow_value in data['FlowValue']]
         data.drop(columns='FlowValue', inplace=True)
-        rest = [load - nuc - imp if load - nuc - imp > 0 else 0 for load, nuc, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Import'])]
+        rest = [load - nuc - sol - imp if load - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'])]
         data.insert(5, 'Rest', rest)
 
-        sums = [data['Nuclear'].sum(), data['Rest'].sum(), data['Import'].sum()]
+        sums = [data['Nuclear'].sum(), data['Rest'].sum(), data['Solar'].sum(), data['Import'].sum()]
 
         ### Create figures
         logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
@@ -513,16 +504,16 @@ class FileMaker:
             fig.suptitle(text_repo.title, fontsize=34)
 
             # pie chart
-            if sums[2] == 0: # import is 0
-                pie_ratios = sums[:2]/sum(sums)
-                explode = [0.1, 0]
-                angle = -225*pie_ratios[0]
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=['#e69624', '#C8C8C8'])
+            if sums[-1] == 0: # import is 0
+                pie_ratios = sums[:-1]/sum(sums)
+                explode = [0.1] + (len(sums)-2)*[0]
+                angle = 360*(1-pie_ratios[0]/2)
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=self.params['colormap'][:-2])
             else:
                 pie_ratios = sums/sum(sums)
-                explode = [0.1, 0, 0]
-                angle = -225*pie_ratios[0]
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=['#e69624', '#C8C8C8', '#7a1b1f'])
+                explode = [0.1] + (len(sums)-1)*[0]
+                angle = 360*(1-pie_ratios[0]/2)
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=self.params['colormap'][:-1])
 
             # bar chart
             if today.year < 2020:
@@ -530,7 +521,7 @@ class FileMaker:
                 bottom, width = 1, 0.1
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
-                    bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.2*j)
+                    bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.2+0.2*j)
                     pct = pie_ratios[0]*height
                     ax2.bar_label(bc, labels=[f'{pct:.1%}'], label_type='center')
 
@@ -539,7 +530,7 @@ class FileMaker:
                 bottom, width = 1, 0.1
                 for j, (height, label) in enumerate(reversed([*zip(bar_ratios, text_repo.labels_bar)])):
                     bottom -= height
-                    bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.1+0.25*j)
+                    bc = ax2.bar(0, height, width, bottom=bottom, color='#e69624', label=label, alpha=0.25+0.25*j)
                     pct = pie_ratios[0]*height
                     ax2.bar_label(bc, labels=[f'{pct:.1%}'], label_type='center')
                 
@@ -591,13 +582,13 @@ class FileMaker:
             data = pd.read_csv(original_file)
 
             imp = [flow_value if flow_value > 0 else 0 for flow_value in data['FlowValue']]
-            rest = [l - n - i if l - n - i > 0 else 0 for l, n, i in zip(data['TotalLoadValue'], data['Nuclear'], imp)]
-            data.insert(2, 'Other', rest)
+            rest = [l - n - s - i if l - n - s - i > 0 else 0 for l, n, s, i in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], imp)]
+            data.insert(2, 'Hydro & other', rest)
 
             data.rename(columns={'TotalLoadValue': 'Load', 'FlowValue': 'Import+/Export-', 'KKM Produktion': 'Muehleberg', 'Kernkraftwerk Gösgen': 'Goesgen'}, inplace=True)
-            order = ['Date', 'Time', 'Load', 'Nuclear', 'Goesgen', 'Leibstadt', 'Muehleberg', 'Beznau 1', 'Beznau 2', 'Import+/Export-', 'Other'] # drops not mentioned automatically
+            order = ['Date', 'Time', 'Load', 'Nuclear', 'Goesgen', 'Leibstadt', 'Muehleberg', 'Beznau 1', 'Beznau 2', 'Hydro & other', 'Solar', 'Import+/Export-'] # drops not mentioned automatically
             data = data[order]
-            data = data.round({'Other': 1, 'Import+/Export-': 1})
+            data = data.round({'Hydro & other': 1, 'Import+/Export-': 1})
 
             # Initialize text repositories
             De = TextRepoDE('datafile', today)
