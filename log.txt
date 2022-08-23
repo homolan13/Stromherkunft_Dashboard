@@ -268,3 +268,16 @@
 2022-08-23 14:44:29: -> make_year_distribution executed
 2022-08-23 14:44:29: Finished generate_files.py
 
+2022-08-23 14:46:55: Started generate_files.py...
+2022-08-23 14:46:55: -> convert_file executed
+2022-08-23 14:46:59: -> make_last30 executed
+2022-08-23 14:46:59: Finished generate_files.py
+
+2022-08-23 15:06:38: Started import_data_entsoe.py...
+2022-08-23 15:07:31: Finished import_data_entsoe.py
+
+2022-08-23 15:07:34: Started generate_files.py...
+2022-08-23 15:07:34: -> convert_file executed
+2022-08-23 15:07:38: -> make_last30 executed
+2022-08-23 15:07:38: Finished generate_files.py
+

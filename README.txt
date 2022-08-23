@@ -19,6 +19,9 @@ matplotlib 3.5.3
 pysftp 0.2.9
 tqdm 4.64.0
 
+Achtung: Da die Solar-Daten erst um 10 Uhr für den letzten Tag aktualisiert werden, sollte der Windows Aufgabenplaner
+die Scripts erst nach diesem Zeitpunkt starten.
+
 Das Projekt befindet sich unter H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH.
 Die Struktur ist folgendermassen:
 - README.txt: Diese Datei.
