@@ -1,12 +1,12 @@
 VISUALISIERUNG DER SCHWEIZER NETTOSTROMPRODUKTION
 
-Stand: 23.08.2022 12:00
+Stand: 26.08.2022 14:30
 Yanis Schärer
 yanis.schaerer@swissnuclear.ch
 
-Kurzbeschreibung: Mit mehreren Python Scripts werden die aktuellen Stromproduktionsdaten von der Transparency
-			Platform von Entso-E heruntergeladen und gefiltert. Die verleibenden Daten werden als Grafiken
-			und als CSV-Dateien neu abgespeichert, mit dem Ziel, diese öffentlich zugänglich zu machen.
+Kurzbeschreibung: Mit mehreren Python Scripts werden die aktuellen Stromproduktionsdaten von der  Entso-E Transparency
+			Platform heruntergeladen und gefiltert. Die verleibenden Daten werden als Grafiken und als
+			CSV-Dateien neu abgespeichert, mit dem Ziel, diese öffentlich zugänglich zu machen.
 			Weitere Informationen: res/Praesentation.pptx
 
 Zum Ausführen benötigt:

@@ -9,6 +9,8 @@ call %CONDAPATH%\Scripts\activate.bat %ENVPATH%
 
 python %~dp0\core\import_data_entsoe.py
 python %~dp0\core\generate_files.py
+for %%# in ("%~dp0\Export\Grafiken\01_Letzte30\DE\*.png") do set file_name="%%~nx#"
+%~dp0\Export\Grafiken\01_Letzte30\DE\%file_name% /max
 
 call conda deactivate
 

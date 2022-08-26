@@ -10,7 +10,7 @@ class TextRepoDE:
         self.figtype = figtype
         self.today = today
         self.ylabel = 'Leistung [MW]'
-        self.labels_stack = ['Kernenergie CH', 'Wasserkraft & Andere', 'Solar', 'Import', 'Export']
+        self.labels_stack = ['Kernenergie', 'Wasserkraft & Andere', 'Solar', 'Import', 'Export']
         self.labels_load = 'Last'
         self.outage_annotated = 'Erzwungene Abschaltung'
         self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_{1/2}$: Beznau 1/2', 'Beznau 2': r'$B_{1/2}$: Beznau 1/2'}
@@ -42,8 +42,8 @@ class TextRepoDE:
 
             case 'month_distribution':
                 self.title = f'Stromherkunft in der Schweiz im {self.month[self.today.month]} {self.today.year}'
-                self.labels_pie_small = ['Kernenergie CH', 'Wasserkraft & Andere', 'Solar']
-                self.labels_pie_large = ['Kernenergie CH', 'Wasserkraft & Andere', 'Solar', 'Import']
+                self.labels_pie_small = ['Kernenergie', 'Wasserkraft & Andere', 'Solar']
+                self.labels_pie_large = ['Kernenergie', 'Wasserkraft & Andere', 'Solar', 'Import']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -52,8 +52,8 @@ class TextRepoDE:
 
             case 'year_distribution':
                 self.title = f'Stromherkunft in der Schweiz im Jahr {self.today.year}'
-                self.labels_pie_small = ['Kernenergie CH', 'Wasserkraft & Andere', 'Solar']
-                self.labels_pie_large = ['Kernenergie CH', 'Wasserkraft & Andere', 'Solar', 'Import']
+                self.labels_pie_small = ['Kernenergie', 'Wasserkraft & Andere', 'Solar']
+                self.labels_pie_large = ['Kernenergie', 'Wasserkraft & Andere', 'Solar', 'Import']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -62,19 +62,19 @@ class TextRepoDE:
                 
             case 'alltime_piebar':
                 self.title = [f'Monatsdurchschnitt Stromherkunft\nim {self.month[m]} seit 2017' for m in range(1,13)]
-                self.labels_pie_small = [f'Kernenergie CH', f'Andere']
-                self.labels_pie_large = [f'Kernenergie CH', f'Andere', f'Import']
+                self.labels_pie_small = [f'Kernenergie', f'Andere']
+                self.labels_pie_large = [f'Kernenergie', f'Andere', f'Import']
                 self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 self.figname = [os.path.join('DE', f'swissnuclear - Monatsdurchschnitt Stromherkunft CH {m:02d} - Entso-E.png') for m in range(1,13)]
 
             case 'line': ### not in use anymore
                 self.title = 'Jährlicher Durchschnitt der Stromherkunft'
-                self.labels_line = [f'Kernenergie CH', f'Import', f'Andere']
+                self.labels_line = [f'Kernenergie', f'Import', f'Andere']
                 self.figname = os.path.join('DE', 'swissnuclear - Jahresdurchschnitt Stromherkunft CH - Entso-E.png')
             
             case 'boxplot': ### not in use anymore
                 self.title = f'Verteilung der Stromherkunft nach\nTechnologien seit Jan. 2017 (Stand: {datetime.today().day}. {self.month_abbr[datetime.today().month]} {datetime.today().year})'
-                self.xticks = ['Kernenergie CH', 'Andere']
+                self.xticks = ['Kernenergie', 'Andere']
                 self.figname = os.path.join('DE', 'swissnuclear - Verteilung Stromherkunft CH - Entso-E.png')
 
             case 'datafile':
@@ -88,7 +88,7 @@ class TextRepoFR:
         self.figtype = figtype
         self.today = today
         self.ylabel = 'Puissance [MW]'
-        self.labels_stack = ['Nucléaire CH', 'Hydraulique & Autre', 'Solaire', 'Import', 'Export']
+        self.labels_stack = ['Nucléaire', 'Hydraulique & Autre', 'Solaire', 'Import', 'Export']
         self.labels_load = 'Charge'
         self.outage_annotated = 'Arrêt forcé'
         self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_{1/2}$: Beznau 1/2', 'Beznau 2': r'$B_{1/2}$: Beznau 1/2'}
@@ -120,8 +120,8 @@ class TextRepoFR:
 
             case 'month_distribution':
                 self.title = f"Origine de l'électricité en Suisse en {self.month[self.today.month]} {self.today.year}"
-                self.labels_pie_small = ['Nucléaire CH', 'Hydraulique & Autre', 'Solaire']
-                self.labels_pie_large = ['Nucléaire CH', 'Hydraulique & Autre', 'Solaire', 'Import']
+                self.labels_pie_small = ['Nucléaire', 'Hydraulique & Autre', 'Solaire']
+                self.labels_pie_large = ['Nucléaire', 'Hydraulique & Autre', 'Solaire', 'Import']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -130,8 +130,8 @@ class TextRepoFR:
 
             case 'year_distribution':
                 self.title = f"Origine de l'électricité en Suisse en {self.today.year}"
-                self.labels_pie_small = ['Nucléaire CH', 'Hydraulique & Autre', 'Solaire']
-                self.labels_pie_large = ['Nucléaire CH', 'Hydraulique & Autre', 'Solaire', 'Import']
+                self.labels_pie_small = ['Nucléaire', 'Hydraulique & Autre', 'Solaire']
+                self.labels_pie_large = ['Nucléaire', 'Hydraulique & Autre', 'Solaire', 'Import']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -140,19 +140,19 @@ class TextRepoFR:
 
             case 'alltime_piebar':
                 self.title = [f"Moyenne mensuelle de la Origine de l'électricité\nen {self.month[m]} depuis 2017" for m in range(1,13)]
-                self.labels_pie_small = ['Nucléaire CH', 'Autre']
-                self.labels_pie_large = ['Nucléaire CH', 'Autre', 'Import']
+                self.labels_pie_small = ['Nucléaire', 'Autre']
+                self.labels_pie_large = ['Nucléaire', 'Autre', 'Import']
                 self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 self.figname = [os.path.join('FR', f"swissnuclear - Moyenne mensuelle de la Origine de lelectricite CH {m:02d} - Entso-E.png") for m in range(1,13)]
 
             case 'line': ### not in use anymore
                 self.title = "Moyenne annuelle de la Origine de l'électricité"
-                self.labels_line = ['Nucléaire CH', 'Import', 'Autre']
+                self.labels_line = ['Nucléaire', 'Import', 'Autre']
                 self.figname = os.path.join('FR', "swissnuclear - Moyenne annuelle de la Origine de lelectricite CH - Entso-E.png")
             
             case 'boxplot': ### not in use anymore
                 self.title = f"Distribution de la Origine de l'électricité\npar technologie depuis janv. 2017 (situation au {datetime.today().day} {self.month_abbr[datetime.today().month]} {datetime.today().year})"
-                self.xticks = ['Nucléaire CH', 'Autre']
+                self.xticks = ['Nucléaire', 'Autre']
                 self.figname = os.path.join('FR', 'swissnuclear - Distribution de la Origine de lelectricite CH - Entso-E.png')
 
             case 'datafile':
@@ -166,7 +166,7 @@ class TextRepoEN:
         self.figtype = figtype
         self.today = today
         self.ylabel = 'Power [MW]'
-        self.labels_stack = ['Nuclear CH', 'Hydro & Other', 'Solar', 'Import', 'Export']
+        self.labels_stack = ['Nuclear', 'Hydro & Other', 'Solar', 'Imports', 'Exports']
         self.labels_load = 'Load'
         self.outage_annotated = 'Forced outage'
         self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_{1/2}$: Beznau 1/2', 'Beznau 2': r'$B_{1/2}$: Beznau 1/2'}
@@ -177,7 +177,7 @@ class TextRepoEN:
 
         match self.figtype:
             case 'last30':
-                self.title = 'Electricity origin in Switzerland during the last 30 days'
+                self.title = 'Origin of electricity in Switzerland during the last 30 days'
                 if self.today.day < 30:
                     self.xlabel = f'{self.month[(self.today-timedelta(days=29)).month]}/{self.month[self.today.month]}'
                     if self.today.month == 1:
@@ -186,55 +186,55 @@ class TextRepoEN:
                         self.xlabel = self.xlabel + f' {self.today.year}'
                 else:
                     self.xlabel = f'{self.month[self.today.month]} {self.today.year}'
-                self.figname = os.path.join('EN', f'swissnuclear - Electricity origin CH last 30 days ({self.today.year}-{self.today.month:02d}-{self.today.day:02d}) - Entso-E.png')
+                self.figname = os.path.join('EN', f'swissnuclear - Origin of electricity CH last 30 days ({self.today.year}-{self.today.month:02d}-{self.today.day:02d}) - Entso-E.png')
 
             case 'month_series':
-                self.title = f'Electricity origin in Switzerland in {self.month[self.today.month]} {self.today.year}'
-                self.figname = os.path.join('EN', f'swissnuclear - Electricity origin CH {self.today.year}-{self.today.month:02d} time series - Entso-E.png')
+                self.title = f'Origin of electricity in Switzerland in {self.month[self.today.month]} {self.today.year}'
+                self.figname = os.path.join('EN', f'swissnuclear - Origin of electricity CH {self.today.year}-{self.today.month:02d} time series - Entso-E.png')
 
             case 'year_series':
-                self.title = f'Electricity origin in Switzerland in {self.today.year}'
-                self.figname = os.path.join('EN', f'swissnuclear - Electricity origin CH {self.today.year} time series - Entso-E.png')
+                self.title = f'Origin of electricity in Switzerland in {self.today.year}'
+                self.figname = os.path.join('EN', f'swissnuclear - Origin of electricity CH {self.today.year} time series - Entso-E.png')
 
             case 'month_distribution':
-                self.title = f'Electricity origin in Switzerland in {self.month[self.today.month]} {self.today.year}'
-                self.labels_pie_small = ['Nuclear CH', 'Hydro & Other', 'Solar']
-                self.labels_pie_large = ['Nuclear CH', 'Hydro & Other', 'Solar', 'Import']
+                self.title = f'Origin of electricity in Switzerland in {self.month[self.today.month]} {self.today.year}'
+                self.labels_pie_small = ['Nuclear', 'Hydro & Other', 'Solar']
+                self.labels_pie_large = ['Nuclear', 'Hydro & Other', 'Solar', 'Imports']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2']
-                self.figname = os.path.join('EN', f'swissnuclear - Electricity origin CH {self.today.year}-{self.today.month:02d} distribution - Entso-E.png')
+                self.figname = os.path.join('EN', f'swissnuclear - Origin of electricity CH {self.today.year}-{self.today.month:02d} distribution - Entso-E.png')
 
             case 'year_distribution':
-                self.title = f'Electricity origin in Switzerland in {self.today.year}'
-                self.labels_pie_small = ['Nuclear CH', 'Hydro & Other', 'Solar']
-                self.labels_pie_large = ['Nuclear CH', 'Hydro & Other', 'Solar', f'Import']
+                self.title = f'Origin of electricity in Switzerland in {self.today.year}'
+                self.labels_pie_small = ['Nuclear', 'Hydro & Other', 'Solar']
+                self.labels_pie_large = ['Nuclear', 'Hydro & Other', 'Solar', f'Imports']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2']
-                self.figname = os.path.join('EN', f'swissnuclear - Electricity origin CH {self.today.year} distribution - Entso-E.png')
+                self.figname = os.path.join('EN', f'swissnuclear - Origin of electricity CH {self.today.year} distribution - Entso-E.png')
                 
             case 'alltime_piebar':
-                self.title = [f'Monthly average Electricity origin\nin {self.month[m]} since 2017' for m in range(1,13)]
-                self.labels_pie_small = [f'Nuclear CH', f'Other']
-                self.labels_pie_large = [f'Nuclear CH', f'Other', f'Import']
+                self.title = [f'Monthly average Origin of electricity\nin {self.month[m]} since 2017' for m in range(1,13)]
+                self.labels_pie_small = [f'Nuclear', f'Other']
+                self.labels_pie_large = [f'Nuclear', f'Other', f'Imports']
                 self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
-                self.figname = [os.path.join('EN', f'swissnuclear - Monthly average Electricity origin CH {m:02d} - Entso-E.png') for m in range(1,13)]
+                self.figname = [os.path.join('EN', f'swissnuclear - Monthly average Origin of electricity CH {m:02d} - Entso-E.png') for m in range(1,13)]
 
             case 'line': ### not in use anymore
-                self.title = 'Annual average of Electricity origin'
-                self.labels_line = [f'Nuclear CH', f'Import', f'Other']
-                self.figname = os.path.join('EN', 'swissnuclear - Annual average Electricity origin CH - Entso-E.png')
+                self.title = 'Annual average of Origin of electricity'
+                self.labels_line = [f'Nuclear', f'Imports', f'Other']
+                self.figname = os.path.join('EN', 'swissnuclear - Annual average Origin of electricity CH - Entso-E.png')
             
             case 'boxplot': ### not in use anymore
-                self.title = f'Distribution of Electricity origin by\ntechnology since Jan. 2017 (as of {self.month_abbr[datetime.today().month]} {datetime.today().day}, {datetime.today().year})'
-                self.xticks = ['Nuclear CH', 'Other']
-                self.figname = os.path.join('EN', 'swissnuclear - Distribution of Electricity origin CH - Entso-E.png')
+                self.title = f'Distribution of Origin of electricity by\ntechnology since Jan. 2017 (as of {self.month_abbr[datetime.today().month]} {datetime.today().day}, {datetime.today().year})'
+                self.xticks = ['Nuclear', 'Other']
+                self.figname = os.path.join('EN', 'swissnuclear - Distribution of Origin of electricity CH - Entso-E.png')
 
             case 'datafile':
-                self.filename = os.path.join('EN', f'swissnuclear - Electricity origin CH {today.year}-{today.month:02d} data - Entso-E.csv')
+                self.filename = os.path.join('EN', f'swissnuclear - Origin of electricity CH {today.year}-{today.month:02d} data - Entso-E.csv')
             
             case _:
                 print('Invalid figure type.')
