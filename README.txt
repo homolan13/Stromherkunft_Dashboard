@@ -1,6 +1,6 @@
 VISUALISIERUNG DER SCHWEIZER NETTOSTROMPRODUKTION
 
-Stand: 29.08.2022 8:20
+Stand: 29.08.2022 9:10
 Yanis Schärer
 yanis.schaerer@swissnuclear.ch
 

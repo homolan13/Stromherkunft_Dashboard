@@ -48,11 +48,15 @@ def main():
 
     print('\nGenerating files...')
 
+    filenames = []
     for fun in tqdm(to_execute):
-        fun()
+        to_log(f'-> Started {fun.__name__}...')
+        filenames += fun()
         to_log(f'-> {fun.__name__} executed')
 
-    print('Files generated')
+    print('\tGenerated files:')
+    for fname in filenames:
+        print(f'\t\t{fname}')
 
     to_log(f'Finished {os.path.basename(__file__)}')
     to_log('', no_time=True)

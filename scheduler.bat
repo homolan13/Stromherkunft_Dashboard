@@ -16,7 +16,7 @@ python %~dp0\core\generate_files.py
 
 REM Open created image
 for %%# in ("%~dp0\Export\Grafiken\01_Letzte30\DE\*.png") do set file_name="%%~nx#"
-%~dp0\Export\Grafiken\01_Letzte30\DE\%file_name% /max
+%~dp0\Export\Grafiken\01_Letzte30\DE\%file_name%
 
 call conda deactivate
 

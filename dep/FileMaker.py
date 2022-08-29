@@ -141,6 +141,7 @@ class FileMaker:
 
         ### Create figures
         logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
+        return_list = []
         for text_repo in text_repos:
             fig = plt.figure(figsize=(20,10), dpi=300)
             ax = plt.gca()
@@ -175,7 +176,10 @@ class FileMaker:
             if self.params['save_plot']:
                 fname = os.path.join(path, text_repo.figname)
                 fig.savefig(fname, dpi='figure', bbox_inches='tight', metadata={'Copyright':f'Swissnuclear, {today.year}', 'Author':'Yanis S.', 'Disclaimer':'Only allowed for private use. Contact Swissnuclear for more information.'})
+                return_list.append(fname)
             plt.close()
+
+        return return_list
 
     def make_month_series(self):
         today = self.today - timedelta(days=28)
@@ -207,6 +211,7 @@ class FileMaker:
 
         ### Create figures
         logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
+        return_list = []
         for text_repo in text_repos:
             fig = plt.figure(figsize=(20,10), dpi=300)
             ax = plt.gca()
@@ -265,7 +270,10 @@ class FileMaker:
             if self.params['save_plot']:
                 fname = os.path.join(path, text_repo.figname)
                 fig.savefig(fname, dpi='figure', bbox_inches='tight', metadata={'Copyright':f'Swissnuclear, {today.year}', 'Author':'Yanis S.', 'Disclaimer':'Only allowed for private use. Contact Swissnuclear for more information.'})
+                return_list.append(fname)
             plt.close()
+
+        return return_list
 
     def make_year_series(self):
         today = self.today - timedelta(days=365)
@@ -300,6 +308,7 @@ class FileMaker:
 
         ### Create figures
         logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
+        return_list = []
         for text_repo in text_repos:
             fig = plt.figure(figsize=(20,10), dpi=300)
             ax = plt.gca()
@@ -361,7 +370,10 @@ class FileMaker:
             if self.params['save_plot']:
                 fname = os.path.join(path, text_repo.figname)
                 fig.savefig(fname, dpi='figure', bbox_inches='tight', metadata={'Copyright':f'Swissnuclear, {today.year}', 'Author':'Yanis S.', 'Disclaimer':'Only allowed for private use. Contact Swissnuclear for more information.'})
+                return_list.append(fname)
             plt.close()
+
+        return return_list
 
     def make_month_distribution(self):
         today = self.today - timedelta(days=28)
@@ -395,8 +407,9 @@ class FileMaker:
 
         ### Create figures
         logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
+        return_list = []
         for text_repo in text_repos:
-            fig, (ax1, ax2) = plt.subplots(1,2,figsize=(22,10))
+            fig, (ax1, ax2) = plt.subplots(1,2,figsize=(20,10))
             fig.subplots_adjust(wspace=0)
             fig.suptitle(text_repo.title, fontsize=34)
 
@@ -462,7 +475,10 @@ class FileMaker:
             if self.params['save_plot']:
                 fname = os.path.join(path, text_repo.figname)
                 fig.savefig(fname, dpi='figure', bbox_inches='tight', metadata={'Copyright':f'Swissnuclear, {today.year}', 'Author':'Yanis S.', 'Disclaimer':'Only allowed for private use. Contact Swissnuclear for more information.'})
+                return_list.append(fname)
             plt.close()
+
+        return return_list
 
     def make_year_distribution(self):
         today = self.today - timedelta(days=365)
@@ -498,8 +514,9 @@ class FileMaker:
 
         ### Create figures
         logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
+        return_list = []
         for text_repo in text_repos:
-            fig, (ax1, ax2) = plt.subplots(1,2,figsize=(22,10))
+            fig, (ax1, ax2) = plt.subplots(1,2,figsize=(20,10))
             fig.subplots_adjust(wspace=0)
             fig.suptitle(text_repo.title, fontsize=34)
 
@@ -566,7 +583,10 @@ class FileMaker:
             if self.params['save_plot']:
                 fname = os.path.join(path, text_repo.figname)
                 fig.savefig(fname, dpi='figure', bbox_inches='tight', metadata={'Copyright':f'Swissnuclear, {today.year}', 'Author':'Yanis S.', 'Disclaimer':'Only allowed for private use. Contact Swissnuclear for more information.'})
+                return_list.append(fname)
             plt.close()
+
+        return return_list
 
     def convert_file(self):
         today = self.today
@@ -577,6 +597,7 @@ class FileMaker:
             loops += 1
 
         # Convert data
+        return_list = []
         for _ in range(loops):
             original_file = os.path.join('core','generation', f'{today.year}', f'{today.year}_{today.month:02d}_generation.csv')
             data = pd.read_csv(original_file)
@@ -597,6 +618,10 @@ class FileMaker:
             text_repos = [De, Fr, En]
 
             for text_repo in text_repos:
-                data.to_csv(os.path.join(dirs['export'], dirs['base'][1], text_repo.filename), index=False)
+                fname = os.path.join(dirs['export'], dirs['base'][1], text_repo.filename)
+                data.to_csv(fname, index=False)
+                return_list.append(fname)
 
             today = today - timedelta(days=today.day)
+
+        return return_list
