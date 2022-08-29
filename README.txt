@@ -7,23 +7,27 @@ yanis.schaerer@swissnuclear.ch
 Kurzbeschreibung: Mit mehreren Python Scripts werden die aktuellen Stromproduktionsdaten von der  Entso-E Transparency
 			Platform heruntergeladen und gefiltert. Die verleibenden Daten werden als Grafiken und als
 			CSV-Dateien neu abgespeichert, mit dem Ziel, diese öffentlich zugänglich zu machen.
+			Das Projekt befindet sich unter H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH.
 			Weitere Informationen: res/Praesentation.pptx
 
+
 Zum Ausführen benötigt:
-Ein Windows-Computer mit Python 3.10.4. Ältere Versionen von Python werden nicht unterstützt und bei neueren
-Versionen kann nicht garantiert werden, dass die Funktionalität erhalten bleibt. Folgende Packages müssen installiert
-sein (optimalerweise in einem separaten Conda Environment, alle heruntergeladen mit Pip):
-numpy 1.23.2
-pandas 1.4.3
-matplotlib 3.5.3
-pysftp 0.2.9
-tqdm 4.64.0
+Ein Windows-Computer mit der Anaconda Python-Distribution (https://www.anaconda.com/products/distribution).
+Die Mindestanforderung ist Python 3.10.4.
+Folgende Schritte müssen durchgeführt werden:
+1. Ordner H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH auf den lokalen Speicher kopieren.
+1. Conda Prompt (Conda Eingabeaufforderung öffnen).
+2. Diesen Befehl eingeben: cd path/to/res (Der Pfad zur Datei environment.yml im Ordner res).
+3. Diesen Befehl eingeben: conda env create --file=environments.yml
+
+Alle Abhängigkeiten sind in res/environment.yml angegeben.
+
 
 Achtung: Da die Solar-Daten erst um 10 Uhr für den letzten Tag aktualisiert werden, sollte der Windows Aufgabenplaner
 die Scripts erst nach diesem Zeitpunkt starten.
 
-Das Projekt befindet sich unter H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH.
-Die Struktur ist folgendermassen:
+
+Die Struktur des Projekts ist folgendermassen:
 - README.txt: Diese Datei.
 - log.txt: Jede Ausführung des Programms wird in dieser Datei erfasst und die Details sind ersichtlich.
 - scheduler.bat: Die Batch-Datei, welche von der Windows Aufgabenplanung täglich ausgeführt wird. Mit einem

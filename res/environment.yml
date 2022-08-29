@@ -1,0 +1,44 @@
+name: sn_entsoe_data
+channels:
+  - defaults
+dependencies:
+  - bzip2=1.0.8=he774522_0
+  - ca-certificates=2022.07.19=haa95532_0
+  - certifi=2022.6.15=py310haa95532_0
+  - libffi=3.4.2=hd77b12b_4
+  - openssl=1.1.1q=h2bbff1b_0
+  - pip=22.1.2=py310haa95532_0
+  - python=3.10.4=hbb2ffb3_0
+  - setuptools=63.4.1=py310haa95532_0
+  - sqlite=3.39.2=h2bbff1b_0
+  - tk=8.6.12=h2bbff1b_0
+  - tzdata=2022a=hda174b7_0
+  - vc=14.2=h21ff451_1
+  - vs2015_runtime=14.27.29016=h5e58377_2
+  - wheel=0.37.1=pyhd3eb1b0_0
+  - wincertstore=0.2=py310haa95532_2
+  - xz=5.2.5=h8cc25b3_1
+  - zlib=1.2.12=h8cc25b3_2
+  - pip:
+    - bcrypt==3.2.2
+    - cffi==1.15.1
+    - colorama==0.4.5
+    - cryptography==37.0.4
+    - cycler==0.11.0
+    - fonttools==4.36.0
+    - kiwisolver==1.4.4
+    - matplotlib==3.5.3
+    - numpy==1.23.2
+    - packaging==21.3
+    - pandas==1.4.3
+    - paramiko==2.11.0
+    - pillow==9.2.0
+    - pycparser==2.21
+    - pynacl==1.5.0
+    - pyparsing==3.0.9
+    - pysftp==0.2.9
+    - python-dateutil==2.8.2
+    - pytz==2022.2.1
+    - six==1.16.0
+    - tqdm==4.64.0
+prefix: C:\Users\yanis.schaerer\Anaconda3\envs\energy_production

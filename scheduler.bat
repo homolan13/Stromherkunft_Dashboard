@@ -1,7 +1,7 @@
 @echo off
 echo DO NOT CLOSE THIS WINDOW
 set CONDAPATH=C:\Users\yanis.schaerer\Anaconda3
-set ENVNAME=energy_prod
+set ENVNAME=sn_entsoe_data
 
 if %ENVNAME%==base (set ENVPATH=%CONDAPATH%) else (set ENVPATH=%CONDAPATH%\envs\%ENVNAME%)
 
