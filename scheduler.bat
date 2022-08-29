@@ -7,8 +7,14 @@ if %ENVNAME%==base (set ENVPATH=%CONDAPATH%) else (set ENVPATH=%CONDAPATH%\envs\
 
 call %CONDAPATH%\Scripts\activate.bat %ENVPATH%
 
+REM Close all open images (and suppress error message if no open image)
+taskkill /f /im Microsoft.Photos.exe > nul 2> nul
+
+REM Run python files
 python %~dp0\core\import_data_entsoe.py
 python %~dp0\core\generate_files.py
+
+REM Open created image
 for %%# in ("%~dp0\Export\Grafiken\01_Letzte30\DE\*.png") do set file_name="%%~nx#"
 %~dp0\Export\Grafiken\01_Letzte30\DE\%file_name% /max
 

@@ -403,3 +403,39 @@
 2022-08-26 14:22:50: -> make_year_distribution executed
 2022-08-26 14:22:50: Finished generate_files.py
 
+2022-08-29 07:38:23: Started import_data_entsoe.py...
+2022-08-29 07:39:03: Finished import_data_entsoe.py
+
+2022-08-29 07:39:05: Started generate_files.py...
+2022-08-29 07:39:05: -> convert_file executed
+2022-08-29 07:39:10: -> make_last30 executed
+2022-08-29 07:39:14: -> make_month_series executed
+2022-08-29 07:39:16: -> make_month_distribution executed
+2022-08-29 07:39:51: -> make_year_series executed
+2022-08-29 07:39:53: -> make_year_distribution executed
+2022-08-29 07:39:53: Finished generate_files.py
+
+2022-08-29 08:13:58: Started import_data_entsoe.py...
+2022-08-29 08:14:37: Finished import_data_entsoe.py
+
+2022-08-29 08:14:39: Started generate_files.py...
+2022-08-29 08:14:39: -> convert_file executed
+2022-08-29 08:14:43: -> make_last30 executed
+2022-08-29 08:14:47: -> make_month_series executed
+2022-08-29 08:14:48: -> make_month_distribution executed
+2022-08-29 08:15:15: -> make_year_series executed
+2022-08-29 08:15:17: -> make_year_distribution executed
+2022-08-29 08:15:17: Finished generate_files.py
+
+2022-08-29 08:15:23: Started import_data_entsoe.py...
+2022-08-29 08:16:06: Finished import_data_entsoe.py
+
+2022-08-29 08:16:07: Started generate_files.py...
+2022-08-29 08:16:07: -> convert_file executed
+2022-08-29 08:16:11: -> make_last30 executed
+2022-08-29 08:16:15: -> make_month_series executed
+2022-08-29 08:16:16: -> make_month_distribution executed
+2022-08-29 08:16:46: -> make_year_series executed
+2022-08-29 08:16:48: -> make_year_distribution executed
+2022-08-29 08:16:48: Finished generate_files.py
+
