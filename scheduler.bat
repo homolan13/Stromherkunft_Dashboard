@@ -18,7 +18,8 @@ REM Run python files
 ::python %~dp0\core\import_data_entsoe.py
 ::python %~dp0\core\generate_files.py
 
-REM Copy all non-static directories from local computer to destination
+REM Copy all non-static directories and files from local computer to destination
+robocopy %~dp0 %DEST% log.txt > nul
 robocopy %~dp0\Export %DEST%\Export /mir > nul
 robocopy %~dp0\core\generation %DEST%\core\generation /mir > nul
 robocopy %~dp0\core\outages %DEST%\core\outages /mir > nul
