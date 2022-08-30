@@ -1,36 +1,58 @@
-VISUALISIERUNG DER SCHWEIZER NETTOSTROMPRODUKTION
+VISUALISIERUNG DER SCHWEIZER STROMHERKUNFT
 
-Stand: 30.08.2022 9:00
+Stand: 30.08.2022 10:00
 Yanis Schärer
 yanis.schaerer@swissnuclear.ch
 
-Kurzbeschreibung: Mit mehreren Python Scripts werden die aktuellen Stromproduktionsdaten von der  Entso-E Transparency
-			Platform heruntergeladen und gefiltert. Die verleibenden Daten werden als Grafiken und als
-			CSV-Dateien neu abgespeichert, mit dem Ziel, diese öffentlich zugänglich zu machen.
-			Das Projekt befindet sich unter H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH.
-			Weitere Informationen: res/Praesentation.pptx.
-			WICHTIG: Sollte sich der Speicherort des Projekts ändern, muss die Variable DEST in scheduler.bat
-			zum neuen Speicherpfad geändert werden.
+Inhaltsverzeichnis:
+-------------------
+- Kurzbeschreibung
+- Einrichten und Ausführen
+- Wichtige Infos
+- Struktur
+- Troubleshooting
+
+Kurzbeschreibung:
+-----------------
+Mit mehreren Python Scripts werden die aktuellen Stromproduktionsdaten von der  Entso-E Transparency Platform
+heruntergeladen und gefiltert. Die verleibenden Daten werden als Grafiken und als CSV-Dateien neu abgespeichert,
+mit dem Ziel, diese öffentlich zugänglich zu machen. Das Projekt befindet sich unter
+H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH. Weitere Informationen: res/Praesentation.pptx.
+WICHTIG: Sollte sich der Speicherort des Projekts ändern, muss die Variable DEST in scheduler.bat ebenfalls zum
+neuen Speicherpfad geändert werden.
 
 
-Zum Ausführen benötigt:
-Ein Windows-Computer mit der Anaconda Python-Distribution (https://www.anaconda.com/products/distribution).
-Die Mindestanforderung ist Python 3.10.4.
+Einrichten und Ausführen:
+-------------------------
+Ein Windows-Computer mit der Anaconda Python-Distribution (https://www.anaconda.com/products/distribution) wird
+benötigt. Die Mindestanforderung ist Python 3.10.4. Alle Abhängigkeiten sind in res/environment.yml angegeben.
+
 Folgende Schritte müssen durchgeführt werden:
-1. Ordner H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH auf den lokalen Speicher kopieren.
-2. Conda Prompt (Conda Eingabeaufforderung öffnen).
-3. Diesen Befehl eingeben: cd path/to/res (Der Pfad zur Datei environment.yml im Ordner res).
-4. Diesen Befehl eingeben: conda env create --file=environments.yml
+1. Sicherstellen, dass die automatisierte Ausführung auf keinem anderen Rechner läuft, sonst kann es zu Problemen
+kommen.
+2. Ordner H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH auf den lokalen Speicher kopieren.
+3. Conda Prompt (Conda Eingabeaufforderung öffnen).
+4. Diesen Befehl eingeben: cd path/to/res (Der Pfad zur Datei environment.yml im Ordner res)
+5. Diesen Befehl eingeben: conda env create --file=environments.yml
+6. Conda Prompt schliessen.
+7. Aufgabenplanung öffnen.
+8. Aktion -> Aufgabe importieren... -> res/Aktualisierung Produktionsdaten Entso-E.xml öffnen -> "Aufgabe erstellen"
+öffnet sich -> Aktionen -> Bearbeiten... öffnen
+9. Durchsuchen... und scheduler.bat auswählen, den Pfad unter Programm/Skript OHNE \scheduler.bat kopieren und bei
+"Starten in (optional)" einfügen. OK und wieder OK drücken.
 
-Alle Abhängigkeiten sind in res/environment.yml angegeben.
+Die Aktualisierung der Daten und Grafiken ist nun automatisiert.
 
 
+Wichtige Informationen:
+-----------------------
 Achtung: Da die Solar-Daten erst um 10 Uhr für den letzten Tag aktualisiert werden, sollte der Windows Aufgabenplaner
-die Scripts erst nach diesem Zeitpunkt starten.
+die Scripts erst nach diesem Zeitpunkt starten (falls die Aufgabe importiert wurde, findet die Aktualisierung täglich
+um 11 Uhr statt).
+
 Die Daten für "Wasserkraft & Andere" werden berechnet und nicht direkt von der Datenquelle genommen, da kleine 
 Kraftwerke nicht verpflichtet sind, ihre Produktionsdaten an Entso-E zu melden. Die Formel zur Berechnung lautet:
 Wasserkraft & Andere = Last + Export - Nuklear - Solar - Import
-
 
 SFTP-Server Details:
 host = sftp-transparency.entsoe.eu
@@ -40,8 +62,8 @@ pw = Swissnuclear2022!
 Mehr Infos: https://transparency.entsoe.eu/content/static_content/
 		Static%20content/knowledge%20base/SFTP-Transparency_Docs.html#welcome
 
-
-
+Struktur:
+---------
 Die Struktur des Projekts ist folgendermassen:
 - README.txt: Diese Datei.
 - log.txt: Jede Ausführung des Programms wird in dieser Datei erfasst und die Details sind ersichtlich.
@@ -85,6 +107,7 @@ Die Struktur des Projekts ist folgendermassen:
 
 
 Troubleshooting:
+----------------
 Mögliche Szenarien, wenn das Programm nicht den gewünschten Output erstellt.
 - Kein Eintrag in log.txt für den aktuellen und möglicherweise vergangene Tage:
 	- Überprüfen, ob der Rechner eingeschaltet ist.
@@ -93,7 +116,7 @@ Mögliche Szenarien, wenn das Programm nicht den gewünschten Output erstellt.
 	  Aufgaben -> Die entsprechende Aufgabe beenden.
 - Nur "Started xxx.py..." aber kein entsprechendes "Finished xxx.py" in log.txt:
 	- Die Batch-Datei scheduler.bat mit einem Doppelklick manuell starten und den Output beobachten. Falls alles
-	  rund läuft sind keine weiteren Massnahmen nötig. Es kommt selten vor, dass etwas nicht so läuft wie es sollte.
+	  rund läuft sind keine weiteren Massnahmen nötig. Es kommt selten vor, dass das Programm abstürzt.
 - Die Grafiken sehen nicht normal aus:
 	Viele mögliche Ursachen. Einige Vorschläge:
 	- Die entsprechende CSV-Datei, welche zusammen mit den Grafiken erstellt wurde, untersuchen.
@@ -101,6 +124,10 @@ Mögliche Szenarien, wenn das Programm nicht den gewünschten Output erstellt.
 	  SFTP-Server manuell zu überprüfen.
 	- Änderung der SFTP-Server Details. Mehr Infos unter https://transparency.entsoe.eu/content/static_content/
 	  Static%20content/knowledge%20base/SFTP-Transparency_Docs.html#welcome.
+- Die Grafiken sind auf H:\ nicht verfügbar, auf C:\ (lokal) dagegen schon:
+	- Sehr wahrscheinlich funktioniert etwas mit dem Befehl robocopy in scheduler.bat nicht. Überprüfen, ob die
+	  Variable DEST noch aktuell ist.
+	- "> nul" hinter den robocopy-Befehlen entfernen und scheduler.bat manuell aktivieren. Output überprüfen.
 
 
 
