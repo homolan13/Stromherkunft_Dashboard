@@ -12,14 +12,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dep.FileHandlerLib import *
 from dep.to_log import to_log
 
-"""
-    host = 'sftp-transparency.entsoe.eu'
-    port = 22
-    user = 'yanis.schaerer@swissnuclear.ch'
-    pw = 'Swissnuclear2022!'
-"""
-
-server_details = {'host': 'sftp-transparency.entsoe.eu', 'port': 22, 'user': 'yanis.schaerer@swissnuclear.ch', 'pw': 'Swissnuclear2022!'}
+# See README.txt for server details
+server_details = {'host': 'sftp-transparency.entsoe.eu', 'port': 22, 'user': 'techmon@swissnuclear.ch', 'pw': 'Z3*Ht~#+5oXqrfkG-sn_'}
 
 custom_order_types = ['Nuclear', 'Hydro Run-of-river and poundage', 'Hydro Water Reservoir', 'Hydro Pumped Storage', 'Solar', 'Wind Onshore']
 custom_order_units = ['Kernkraftwerk Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'KKM Produktion']

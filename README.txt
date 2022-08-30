@@ -57,8 +57,8 @@ Wasserkraft & Andere = Last + Export - Nuklear - Solar - Import
 SFTP-Server Details:
 host = sftp-transparency.entsoe.eu
 port = 22
-user = yanis.schaerer@swissnuclear.ch (provisorisch)
-pw = Swissnuclear2022!
+user = techmon@swissnuclear.ch
+pw = Z3*Ht~#+5oXqrfkG-sn_
 Mehr Infos: https://transparency.entsoe.eu/content/static_content/
 		Static%20content/knowledge%20base/SFTP-Transparency_Docs.html#welcome
 
