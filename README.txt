@@ -1,6 +1,6 @@
 VISUALISIERUNG DER SCHWEIZER NETTOSTROMPRODUKTION
 
-Stand: 29.08.2022 9:10
+Stand: 30.08.2022 9:00
 Yanis Schärer
 yanis.schaerer@swissnuclear.ch
 
@@ -8,7 +8,9 @@ Kurzbeschreibung: Mit mehreren Python Scripts werden die aktuellen Stromprodukti
 			Platform heruntergeladen und gefiltert. Die verleibenden Daten werden als Grafiken und als
 			CSV-Dateien neu abgespeichert, mit dem Ziel, diese öffentlich zugänglich zu machen.
 			Das Projekt befindet sich unter H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH.
-			Weitere Informationen: res/Praesentation.pptx
+			Weitere Informationen: res/Praesentation.pptx.
+			WICHTIG: Sollte sich der Speicherort des Projekts ändern, muss die Variable DEST in scheduler.bat
+			zum neuen Speicherpfad geändert werden.
 
 
 Zum Ausführen benötigt:
@@ -16,15 +18,28 @@ Ein Windows-Computer mit der Anaconda Python-Distribution (https://www.anaconda.
 Die Mindestanforderung ist Python 3.10.4.
 Folgende Schritte müssen durchgeführt werden:
 1. Ordner H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH auf den lokalen Speicher kopieren.
-1. Conda Prompt (Conda Eingabeaufforderung öffnen).
-2. Diesen Befehl eingeben: cd path/to/res (Der Pfad zur Datei environment.yml im Ordner res).
-3. Diesen Befehl eingeben: conda env create --file=environments.yml
+2. Conda Prompt (Conda Eingabeaufforderung öffnen).
+3. Diesen Befehl eingeben: cd path/to/res (Der Pfad zur Datei environment.yml im Ordner res).
+4. Diesen Befehl eingeben: conda env create --file=environments.yml
 
 Alle Abhängigkeiten sind in res/environment.yml angegeben.
 
 
 Achtung: Da die Solar-Daten erst um 10 Uhr für den letzten Tag aktualisiert werden, sollte der Windows Aufgabenplaner
 die Scripts erst nach diesem Zeitpunkt starten.
+Die Daten für "Wasserkraft & Andere" werden berechnet und nicht direkt von der Datenquelle genommen, da kleine 
+Kraftwerke nicht verpflichtet sind, ihre Produktionsdaten an Entso-E zu melden. Die Formel zur Berechnung lautet:
+Wasserkraft & Andere = Last + Export - Nuklear - Solar - Import
+
+
+SFTP-Server Details:
+host = sftp-transparency.entsoe.eu
+port = 22
+user = yanis.schaerer@swissnuclear.ch (provisorisch)
+pw = Swissnuclear2022!
+Mehr Infos: https://transparency.entsoe.eu/content/static_content/
+		Static%20content/knowledge%20base/SFTP-Transparency_Docs.html#welcome
+
 
 
 Die Struktur des Projekts ist folgendermassen:
@@ -68,13 +83,6 @@ Die Struktur des Projekts ist folgendermassen:
 - Export: Wird automatisch beim Ausführen von generate_files.py erstellt, wenn nicht schon vorhanden. Enthält alle
 	    erstellten Grafiken und CSV-Dateien.
 
-SFTP-Server Details:
-host = sftp-transparency.entsoe.eu
-port = 22
-user = ------------------------ HIER EINFÜGEN ---------------------------------
-pw = ------------------------ HIER EINFÜGEN ---------------------------------
-Mehr Infos: https://transparency.entsoe.eu/content/static_content/
-		Static%20content/knowledge%20base/SFTP-Transparency_Docs.html#welcome
 
 Troubleshooting:
 Mögliche Szenarien, wenn das Programm nicht den gewünschten Output erstellt.

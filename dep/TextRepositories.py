@@ -10,12 +10,12 @@ class TextRepoDE:
         self.figtype = figtype
         self.today = today
         self.ylabel = 'Leistung [MW]'
-        self.labels_stack = ['Kernenergie', 'Wasserkraft & Andere', 'Solar', 'Import', 'Export']
+        self.labels_stack = ['Kernenergie', 'Wasserkraft & Andere*', 'Solar', 'Import']
         self.labels_load = 'Last'
         self.outage_annotated = 'Erzwungene Abschaltung'
         self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_{1/2}$: Beznau 1/2', 'Beznau 2': r'$B_{1/2}$: Beznau 1/2'}
         self.roundingerror = 'Mögliche Abweichungen resultieren aus Rundungsdifferenzen.'
-        self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Datenquelle: Entso-E'
+        self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Datenquelle: Entso-E\n* Wasserkraft & andere aus Entso-E Daten berechnet'
         self.month_cap = {1: 'Januar', 2: 'Februar', 3: 'März', 4: 'April', 5: 'Mai', 6: 'Juni', 7: 'Juli', 8: 'August', 9: 'September', 10: 'Oktober', 11: 'November', 12: 'Dezember'}
         self.month_low = {k: v.lower() for k,v in self.month_cap.items()}
         self.month_abbr = {1: 'Jan.', 2: 'Febr.', 3: 'März', 4: 'Apr.', 5: 'Mai', 6: 'Juni', 7: 'Juli', 8: 'Aug.', 9: 'Sept.', 10: 'Okt.', 11: 'Nov.', 12: 'Dez.'}
@@ -43,8 +43,8 @@ class TextRepoDE:
 
             case 'month_distribution':
                 self.title = f'Stromherkunft in der Schweiz im {self.month_cap[self.today.month]} {self.today.year}'
-                self.labels_pie_small = ['Kernenergie', 'Wasserkraft & Andere', 'Solar']
-                self.labels_pie_large = ['Kernenergie', 'Wasserkraft & Andere', 'Solar', 'Import']
+                self.labels_pie_small = ['Kernenergie', 'Wasserkraft & Andere*', 'Solar']
+                self.labels_pie_large = ['Kernenergie', 'Wasserkraft & Andere*', 'Solar', 'Import']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -53,8 +53,8 @@ class TextRepoDE:
 
             case 'year_distribution':
                 self.title = f'Stromherkunft in der Schweiz im Jahr {self.today.year}'
-                self.labels_pie_small = ['Kernenergie', 'Wasserkraft & Andere', 'Solar']
-                self.labels_pie_large = ['Kernenergie', 'Wasserkraft & Andere', 'Solar', 'Import']
+                self.labels_pie_small = ['Kernenergie', 'Wasserkraft & Andere*', 'Solar']
+                self.labels_pie_large = ['Kernenergie', 'Wasserkraft & Andere*', 'Solar', 'Import']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -89,12 +89,12 @@ class TextRepoFR:
         self.figtype = figtype
         self.today = today
         self.ylabel = 'Puissance [MW]'
-        self.labels_stack = ['Nucléaire', 'Hydraulique & Autre', 'Solaire', 'Import', 'Export']
+        self.labels_stack = ['Nucléaire', 'Hydraulique & Autre*', 'Solaire', 'Import']
         self.labels_load = 'Charge'
         self.outage_annotated = 'Arrêt forcé'
         self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_{1/2}$: Beznau 1/2', 'Beznau 2': r'$B_{1/2}$: Beznau 1/2'}
         self.roundingerror = "Les écarts éventuels proviennent de différences d’arrondissement "
-        self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Source: Entso-E'
+        self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Source: Entso-E\n* Hydraulique & autre calculés à partir des données Entso-E'
         self.month_cap = {1: 'Janvier', 2: 'Février', 3: 'Mars', 4: 'Avril', 5: 'Mai', 6: 'Juin', 7: 'Juillet', 8: 'Août', 9: 'Septembre', 10: 'Octobre', 11: 'Novembre', 12: 'Décembre'}
         self.month_low = {k: v.lower() for k,v in self.month_cap.items()}
         self.month_abbr = {1: 'Janv.', 2: 'Févr.', 3: 'Mars', 4: 'Avr.', 5: 'Mai', 6: 'Juin', 7: 'Juill.', 8: 'Août', 9: 'Sept.', 10: 'Oct.', 11: 'Nov.', 12: 'Déc.'}
@@ -122,8 +122,8 @@ class TextRepoFR:
 
             case 'month_distribution':
                 self.title = f"Origine de l'électricité en Suisse en {self.month_low[self.today.month]} {self.today.year}"
-                self.labels_pie_small = ['Nucléaire', 'Hydraulique & Autre', 'Solaire']
-                self.labels_pie_large = ['Nucléaire', 'Hydraulique & Autre', 'Solaire', 'Import']
+                self.labels_pie_small = ['Nucléaire', 'Hydraulique & Autre*', 'Solaire']
+                self.labels_pie_large = ['Nucléaire', 'Hydraulique & Autre*', 'Solaire', 'Import']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -132,8 +132,8 @@ class TextRepoFR:
 
             case 'year_distribution':
                 self.title = f"Origine de l'électricité en Suisse en {self.today.year}"
-                self.labels_pie_small = ['Nucléaire', 'Hydraulique & Autre', 'Solaire']
-                self.labels_pie_large = ['Nucléaire', 'Hydraulique & Autre', 'Solaire', 'Import']
+                self.labels_pie_small = ['Nucléaire', 'Hydraulique & Autre*', 'Solaire']
+                self.labels_pie_large = ['Nucléaire', 'Hydraulique & Autre*', 'Solaire', 'Import']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -168,12 +168,12 @@ class TextRepoEN:
         self.figtype = figtype
         self.today = today
         self.ylabel = 'Power [MW]'
-        self.labels_stack = ['Nuclear', 'Hydro & Other', 'Solar', 'Imports', 'Exports']
+        self.labels_stack = ['Nuclear', 'Hydro & Other*', 'Solar', 'Imports']
         self.labels_load = 'Load'
         self.outage_annotated = 'Forced outage'
         self.outage_annotations = {'Kernkraftwerk Gösgen': r'$G$: Gösgen', 'Leibstadt': r'$L$: Leibstadt', 'KKM Produktion': r'$M$: Mühleberg', 'Beznau 1': r'$B_{1/2}$: Beznau 1/2', 'Beznau 2': r'$B_{1/2}$: Beznau 1/2'}
         self.roundingerror = 'All sorts of deviations are due to rounding errors.'
-        self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Source: Entso-E'
+        self.annotation = r'$\copyright$'+f' swissnuclear, {datetime.today().year}. Source: Entso-E\n* Hydro & Other calculated from Entso-E data'
         self.month_cap = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'Mai', 6: 'June', 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
         self.month_low = {k: v.lower() for k,v in self.month_cap.items()}
         self.month_abbr = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'Mai', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
@@ -201,8 +201,8 @@ class TextRepoEN:
 
             case 'month_distribution':
                 self.title = f'Origin of electricity in Switzerland in {self.month_cap[self.today.month]} {self.today.year}'
-                self.labels_pie_small = ['Nuclear', 'Hydro & Other', 'Solar']
-                self.labels_pie_large = ['Nuclear', 'Hydro & Other', 'Solar', 'Imports']
+                self.labels_pie_small = ['Nuclear', 'Hydro & Other*', 'Solar']
+                self.labels_pie_large = ['Nuclear', 'Hydro & Other*', 'Solar', 'Imports']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:
@@ -211,8 +211,8 @@ class TextRepoEN:
 
             case 'year_distribution':
                 self.title = f'Origin of electricity in Switzerland in {self.today.year}'
-                self.labels_pie_small = ['Nuclear', 'Hydro & Other', 'Solar']
-                self.labels_pie_large = ['Nuclear', 'Hydro & Other', 'Solar', f'Imports']
+                self.labels_pie_small = ['Nuclear', 'Hydro & Other*', 'Solar']
+                self.labels_pie_large = ['Nuclear', 'Hydro & Other*', 'Solar', f'Imports']
                 if today.year < 2020:
                     self.labels_bar = ['Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'Mühleberg']
                 else:

@@ -21,7 +21,7 @@ params = {
     'fontsize': 20,
     'fontfamily': 'Segoe UI',
     'directories': directories,
-    'colormap': ['#e69624', '#9fc8e0', '#e3dc00', '#7a1b1f', '#78a014'], # specified by corporate design
+    'colormap': ['#e69624', '#9fc8e0', '#e3dc00', '#7a1b1f'], # specified by corporate design
     'line': '#ba6d02',
     'text': '#915500',
     'include_outages': False,
@@ -32,8 +32,8 @@ params = {
 def main():
     to_log(f'Started {os.path.basename(__file__)}...')
 
-    today = datetime.today() - timedelta(days=1) # real date
-    # today = datetime(2020,1,6) # custom date
+    # today = datetime.today() - timedelta(days=1) # real date
+    today = datetime(2022,1,6) # custom date
     print(f'\n{os.path.basename(__file__)} started at: {today.year}-{today.month:02d}-{today.day:02d} {today.hour:02d}:{today.minute:02d}:{today.second:02d}')
 
     fm = FileMaker(today, params)

@@ -133,10 +133,10 @@ class FileMaker:
         data['Export'] = [-flow_value if flow_value < 0 else 0 for flow_value in data['FlowValue']]
         data.drop(columns='FlowValue', inplace=True)
 
-        rest = [load - nuc - sol - imp if load - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'])]
+        rest = [load + exp - nuc - sol - imp if load + exp - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp, exp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'], data['Export'])]
         ticks = [f'{d[-3:-1]}.{d[5:7]}.' for d in data['Date']]
 
-        y = np.array([data['Nuclear'], rest, data['Solar'], data['Import'], data['Export']])
+        y = np.array([data['Nuclear'], rest, data['Solar'], data['Import']])
         stack_max = max(np.sum(y, axis=0))
 
         ### Create figures
@@ -166,7 +166,7 @@ class FileMaker:
 
             plt.legend(loc=9, bbox_to_anchor=(0.5,0.99), ncol=len(text_repo.labels_stack)+1, frameon=False, columnspacing=2).set_zorder(35)
 
-            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.70,0.03), fontsize=10) # add copyright
+            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.65,0.05), fontsize=10, va='top') # add copyright
 
             imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE') # add swissnuclear logo
             imgax.imshow(logo)
@@ -206,7 +206,7 @@ class FileMaker:
         data['Export'] = [-flow_value if flow_value < 0 else 0 for flow_value in data['FlowValue']]
         data.drop(columns='FlowValue', inplace=True)
 
-        rest = [load - nuc - sol - imp if load - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'])]
+        rest = [load + exp - nuc - sol - imp if load + exp - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp, exp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'], data['Export'])]
         ticks = [f'{d[-3:-1]}.{d[5:7]}.' for d in data['Date']]
 
         ### Create figures
@@ -229,10 +229,10 @@ class FileMaker:
                         if annotated:
                             plt.annotate(text_repo.outage_annotated, (outage[1]-4, outage[2]+500), color=self.params['color_outages'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
                             annotated = False
-                    plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
+                    plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.05), fontsize=10, va='top')
 
             annotation_idx = self._csp(data, outage_idx, 50)
-            y = np.array([data['Nuclear'], rest, data['Solar'], data['Import'], data['Export']])
+            y = np.array([data['Nuclear'], rest, data['Solar'], data['Import']])
             plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap'], labels=text_repo.labels_stack, zorder=10)
             accumulated = pd.concat([data[unit] for unit in self.units], axis=1).cumsum(axis=1)
             for unit, idx in annotation_idx.items():
@@ -261,7 +261,7 @@ class FileMaker:
 
             plt.legend(loc=9, bbox_to_anchor=(0.5,0.99), ncol=len(text_repo.labels_stack)+1, frameon=False, columnspacing=2).set_zorder(35)          
 
-            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.70,0.03), fontsize=10)
+            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.65,0.05), fontsize=10, va='top')
 
             imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE')
             imgax.imshow(logo)
@@ -303,7 +303,7 @@ class FileMaker:
         data['Export'] = [-flow_value if flow_value < 0 else 0 for flow_value in data['FlowValue']]
         data.drop(columns='FlowValue', inplace=True)
 
-        rest = [load - nuc - sol - imp if load - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'])]
+        rest = [load + exp - nuc - sol - imp if load + exp - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp, exp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'], data['Export'])]
         ticks = [f'{d[-3:-1]}.{d[5:7]}.' for d in data['Date']]
 
         ### Create figures
@@ -326,10 +326,10 @@ class FileMaker:
                         if annotated:
                             plt.annotate(text_repo.outage_annotated, (outage[1]-40, outage[2]+500), color=self.params['color_outages'], fontsize=14, rotation=90, zorder=25, bbox={'edgecolor': 'w', 'linewidth': 0, 'facecolor': 'w', 'alpha': 0.4, 'boxstyle': 'round'})
                             annotated = False
-                    plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
+                    plt.annotate(', '.join(outage_legend), xycoords='figure fraction', xy=(0.07,0.05), fontsize=10, va='top')
 
             annotation_idx = self._csp(data, outage_idx, 500)
-            y = np.array([data['Nuclear'], rest, data['Solar'], data['Import'], data['Export']])
+            y = np.array([data['Nuclear'], rest, data['Solar'], data['Import']])
             plt.stackplot(range(0,len(data.index)), y, colors=self.params['colormap'], labels=text_repo.labels_stack, zorder=10)
             accumulated = pd.concat([data[unit] for unit in self.units], axis=1).cumsum(axis=1)
             for unit, idx in annotation_idx.items():
@@ -361,7 +361,7 @@ class FileMaker:
 
             plt.legend(loc=9, bbox_to_anchor=(0.5,0.99), ncol=len(text_repo.labels_stack)+1, frameon=False, columnspacing=2).set_zorder(35)               
 
-            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.70,0.03), fontsize=10)
+            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.65,0.05), fontsize=10, va='top')
 
             imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE')
             imgax.imshow(logo)
@@ -400,7 +400,7 @@ class FileMaker:
         data['Import'] = [flow_value if flow_value > 0 else 0 for flow_value in data['FlowValue']]
         data['Export'] = [-flow_value if flow_value < 0 else 0 for flow_value in data['FlowValue']]
         data.drop(columns='FlowValue', inplace=True)
-        rest = [load - nuc - sol - imp if load - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'])]
+        rest = [load + exp - nuc - sol - imp if load + exp - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp, exp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'], data['Export'])]
         data.insert(5, 'Rest', rest)
 
         sums = [data['Nuclear'].sum(), data['Rest'].sum(), data['Solar'].sum(), data['Import'].sum()]
@@ -418,12 +418,12 @@ class FileMaker:
                 pie_ratios = sums[:-1]/sum(sums)
                 explode = [0.1] + (len(sums)-2)*[0]
                 angle = 360*(1-pie_ratios[0]/2) # 0° is start --> (counter-clockwise) 360° - half of important slice
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=self.params['colormap'][:-2])
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=self.params['colormap'])
             else:
                 pie_ratios = sums/sum(sums)
                 explode = [0.1] + (len(sums)-1)*[0]
                 angle = 360*(1-pie_ratios[0]/2)
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=self.params['colormap'][:-1])
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=self.params['colormap'])
 
             # bar chart
             if today.year < 2020:
@@ -465,8 +465,8 @@ class FileMaker:
             ax2.add_artist(con)
             con.set_linewidth(2)
 
-            plt.annotate(text_repo.roundingerror, xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
-            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.62,0.03), fontsize=10)
+            plt.annotate(text_repo.roundingerror, xycoords='figure fraction', xy=(0.07,0.05), fontsize=10, va='top')
+            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.60,0.05), fontsize=10, va='top')
 
             imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE')
             imgax.imshow(logo)
@@ -507,7 +507,7 @@ class FileMaker:
         data['Import'] = [flow_value if flow_value > 0 else 0 for flow_value in data['FlowValue']]
         data['Export'] = [-flow_value if flow_value < 0 else 0 for flow_value in data['FlowValue']]
         data.drop(columns='FlowValue', inplace=True)
-        rest = [load - nuc - sol - imp if load - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'])]
+        rest = [load + exp - nuc - sol - imp if load + exp - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp, exp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'], data['Export'])]
         data.insert(5, 'Rest', rest)
 
         sums = [data['Nuclear'].sum(), data['Rest'].sum(), data['Solar'].sum(), data['Import'].sum()]
@@ -525,12 +525,12 @@ class FileMaker:
                 pie_ratios = sums[:-1]/sum(sums)
                 explode = [0.1] + (len(sums)-2)*[0]
                 angle = 360*(1-pie_ratios[0]/2)
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=self.params['colormap'][:-2])
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=self.params['colormap'])
             else:
                 pie_ratios = sums/sum(sums)
                 explode = [0.1] + (len(sums)-1)*[0]
                 angle = 360*(1-pie_ratios[0]/2)
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=self.params['colormap'][:-1])
+                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=self.params['colormap'])
 
             # bar chart
             if today.year < 2020:
@@ -573,8 +573,8 @@ class FileMaker:
             ax2.add_artist(con)
             con.set_linewidth(2)
 
-            plt.annotate(text_repo.roundingerror, xycoords='figure fraction', xy=(0.07,0.03), fontsize=10)
-            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.62,0.03), fontsize=10)
+            plt.annotate(text_repo.roundingerror, xycoords='figure fraction', xy=(0.07,0.05), fontsize=10, va='top')
+            plt.annotate(text_repo.annotation, xycoords='figure fraction', xy=(0.60,0.05), fontsize=10, va='top')
 
             imgax = fig.add_axes([0.8, 0.94, 0.1, 0.1], anchor='SE')
             imgax.imshow(logo)
@@ -625,3 +625,4 @@ class FileMaker:
             today = today - timedelta(days=today.day)
 
         return return_list
+
