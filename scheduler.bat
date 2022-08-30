@@ -23,8 +23,8 @@ robocopy %~dp0 %DEST% log.txt > nul
 robocopy %~dp0\Export %DEST%\Export /mir > nul
 robocopy %~dp0\core\generation %DEST%\core\generation /mir > nul
 robocopy %~dp0\core\outages %DEST%\core\outages /mir > nul
+echo.
 echo Files copied to %DEST%
-
 
 REM Open created image
 for %%# in ("%~dp0\Export\Grafiken\01_Letzte30\DE\*.png") do set FILE_NAME="%%~nx#"
