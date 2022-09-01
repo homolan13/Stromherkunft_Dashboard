@@ -27,8 +27,8 @@ echo.
 echo Files copied to %DEST%
 
 REM Open created image
-for %%# in ("%~dp0\Export\Grafiken\01_Letzte30\DE\*.png") do set FILE_NAME="%%~nx#"
-%~dp0\Export\Grafiken\01_Letzte30\DE\%FILE_NAME%
+::for %%# in ("%~dp0\Export\Grafiken\01_Letzte30\DE\*.png") do set FILE_NAME="%%~nx#"
+::%~dp0\Export\Grafiken\01_Letzte30\DE\%FILE_NAME%
 
 call conda deactivate
 

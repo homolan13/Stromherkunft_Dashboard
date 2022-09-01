@@ -24,12 +24,19 @@ neuen Speicherpfad geändert werden.
 
 Einrichten und Ausführen:
 -------------------------
+WICHTIG: Um Probleme zu vermeiden, sollte die automatisierte Aktualisierung nur auf einem lokalen Rechner
+eingerichtet sein. Wenn zwei Rechner benötigt sind (z.B. wenn einer als Backup dient), dass muss beachtet
+werden, dass der Zeitunterschied zwischen den Aufgaben in der Aufgabenplanung mindestens eine Stunde betragen.
+Die Zeit kann manuell in res/Aktualisierung Produktionsdaten Entso-E unter <StartBoundary> angepasst werden.
+
 Ein Windows-Computer mit der Anaconda Python-Distribution (https://www.anaconda.com/products/distribution) wird
 benötigt. Die Mindestanforderung ist Python 3.10.4. Alle Abhängigkeiten sind in res/environment.yml angegeben.
 
 Folgende Schritte müssen durchgeführt werden:
 1. Sicherstellen, dass die automatisierte Ausführung auf keinem anderen Rechner läuft, sonst kann es zu Problemen
-kommen.
+kommen. Falls ein zweiter Rechner notwendig ist (z.B. als Backup), dann Schritt 1*. ausführen, sonst überspringen.
+1*. res/Aktualisierung Produktionsdaten Entso-E öffnen und die Uhrzeit bei <StartBoundary> auf mindestens eine
+Stunde später stellen.
 2. Ordner H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH auf den lokalen Speicher kopieren.
 3. Conda Prompt (Conda Eingabeaufforderung öffnen).
 4. Diesen Befehl eingeben: cd path/to/res (Der Pfad zur Datei environment.yml im Ordner res)
@@ -43,12 +50,15 @@ kommen.
 
 Die Aktualisierung der Daten und Grafiken ist nun automatisiert.
 
+Wird gewünscht, dass nach jeder Aktualisierung die deutsche Grafik der letzten 30 Tage angezeigt wird, müssen die
+Doppelpunkte in den beiden Zeilen unter "REM Open created images" entfernt werden.
+
 
 Wichtige Informationen:
 -----------------------
-Achtung: Da die Solar-Daten erst um 10 Uhr für den letzten Tag aktualisiert werden, sollte der Windows Aufgabenplaner
-die Scripts erst nach diesem Zeitpunkt starten (falls die Aufgabe importiert wurde, findet die Aktualisierung täglich
-um 11 Uhr statt).
+WICHTIG: Da die Solar-Daten erst um 10 Uhr für den letzten Tag aktualisiert werden, sollte der Windows Aufgabenplaner
+die Scripts erst nach diesem Zeitpunkt starten (falls die Aufgabe importiert wurde (ohne Schritt 1*.), findet die
+Aktualisierung täglich um 11 Uhr statt).
 
 Die Daten für "Wasserkraft & Andere" werden berechnet und nicht direkt von der Datenquelle genommen, da kleine 
 Kraftwerke nicht verpflichtet sind, ihre Produktionsdaten an Entso-E zu melden. Die Formel zur Berechnung lautet:
@@ -64,8 +74,7 @@ Mehr Infos: https://transparency.entsoe.eu/content/static_content/
 
 Struktur:
 ---------
-Die Struktur des Projekts ist folgendermassen:
-- README.txt: Diese Datei.
+- README.txt: Anleitung und Informationen.
 - log.txt: Jede Ausführung des Programms wird in dieser Datei erfasst und die Details sind ersichtlich.
 - scheduler.bat: Die Batch-Datei, welche von der Windows Aufgabenplanung täglich ausgeführt wird. Mit einem
 		     Doppelklick kann die Ausführung manuell gestartet werden. Dabei ist der Output der Scripts
