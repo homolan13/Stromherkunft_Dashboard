@@ -81,7 +81,7 @@ class FileMaker:
             unit_len = {k: (len(unit_idx[k]) if type(unit_idx[k]) is list else data_len+1) for k in self.units}
 
         return unit_idx
-        
+
     def make_dirs(self):
         """ Makes necessary directories if not already existing """
         dirs = self.params['directories']
@@ -380,9 +380,9 @@ class FileMaker:
 
         plt.rcParams['font.size'] = self.params['fontsize']+2
         plt.rcParams['font.family'] = self.params['fontfamily']
-
         d = self.params['directories']
         path = os.path.join(d['export'], d['base'][0], d['layer1'][1])
+        cmap = [self.params['colormap'][i] for i in [0,2,1,3]]
 
         ### Initialize text repository
         De = TextRepoDE('month_distribution', today)
@@ -403,7 +403,7 @@ class FileMaker:
         rest = [load + exp - nuc - sol - imp if load + exp - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp, exp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'], data['Export'])]
         data.insert(5, 'Rest', rest)
 
-        sums = [data['Nuclear'].sum(), data['Rest'].sum(), data['Solar'].sum(), data['Import'].sum()]
+        sums = [data['Nuclear'].sum(), data['Solar'].sum(), data['Rest'].sum(), data['Import'].sum()]
 
         ### Create figures
         logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
@@ -418,12 +418,15 @@ class FileMaker:
                 pie_ratios = sums[:-1]/sum(sums)
                 explode = [0.1] + (len(sums)-2)*[0]
                 angle = 360*(1-pie_ratios[0]/2) # 0° is start --> (counter-clockwise) 360° - half of important slice
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=self.params['colormap'])
+                wedges, labels, pct_texts = ax1.pie(pie_ratios,  autopct='%.1f%%', startangle=angle, labels=text_repo.labels_pie_small, labeldistance=1.04, rotatelabels=True, explode=explode, colors=cmap, textprops={'va': 'center', 'rotation_mode': 'anchor'})
             else:
                 pie_ratios = sums/sum(sums)
                 explode = [0.1] + (len(sums)-1)*[0]
                 angle = 360*(1-pie_ratios[0]/2)
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=self.params['colormap'])
+                wedges, labels, pct_texts = ax1.pie(pie_ratios,  autopct='%.1f%%', startangle=angle, labels=text_repo.labels_pie_large, labeldistance=1.04, rotatelabels=True, explode=explode, colors=cmap, textprops={'va': 'center', 'rotation_mode': 'anchor'})
+
+            for l, p in zip(labels, pct_texts):
+                p.set_rotation(l.get_rotation())
 
             # bar chart
             if today.year < 2020:
@@ -487,6 +490,7 @@ class FileMaker:
         plt.rcParams['font.family'] = self.params['fontfamily']
         d = self.params['directories']
         path = os.path.join(d['export'], d['base'][0], d['layer1'][2])
+        cmap = [self.params['colormap'][i] for i in [0,2,1,3]]
 
         ### Initialize text repository
         De = TextRepoDE('year_distribution', today)
@@ -510,7 +514,7 @@ class FileMaker:
         rest = [load + exp - nuc - sol - imp if load + exp - nuc - sol - imp > 0 else 0 for load, nuc, sol, imp, exp in zip(data['TotalLoadValue'], data['Nuclear'], data['Solar'], data['Import'], data['Export'])]
         data.insert(5, 'Rest', rest)
 
-        sums = [data['Nuclear'].sum(), data['Rest'].sum(), data['Solar'].sum(), data['Import'].sum()]
+        sums = [data['Nuclear'].sum(), data['Solar'].sum(), data['Rest'].sum(), data['Import'].sum()]
 
         ### Create figures
         logo = plt.imread(os.path.join('res', 'swissnuclear logo.png'))
@@ -524,13 +528,16 @@ class FileMaker:
             if sums[-1] == 0: # import is 0
                 pie_ratios = sums[:-1]/sum(sums)
                 explode = [0.1] + (len(sums)-2)*[0]
-                angle = 360*(1-pie_ratios[0]/2)
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_small, explode=explode, colors=self.params['colormap'])
+                angle = 360*(1-pie_ratios[0]/2) # 0° is start --> (counter-clockwise) 360° - half of important slice
+                wedges, labels, pct_texts = ax1.pie(pie_ratios,  autopct='%.1f%%', startangle=angle, labels=text_repo.labels_pie_small, labeldistance=1.04, rotatelabels=True, explode=explode, colors=cmap, textprops={'va': 'center', 'rotation_mode': 'anchor'})
             else:
                 pie_ratios = sums/sum(sums)
                 explode = [0.1] + (len(sums)-1)*[0]
                 angle = 360*(1-pie_ratios[0]/2)
-                wedges, *_ = ax1.pie(pie_ratios,  autopct='%1.1f%%', startangle=angle, labels=text_repo.labels_pie_large, explode=explode, colors=self.params['colormap'])
+                wedges, labels, pct_texts = ax1.pie(pie_ratios,  autopct='%.1f%%', startangle=angle, labels=text_repo.labels_pie_large, labeldistance=1.04, rotatelabels=True, explode=explode, colors=cmap, textprops={'va': 'center', 'rotation_mode': 'anchor'})
+
+            for l, p in zip(labels, pct_texts):
+                p.set_rotation(l.get_rotation())
 
             # bar chart
             if today.year < 2020:
@@ -593,7 +600,7 @@ class FileMaker:
         dirs = self.params['directories']
 
         loops = 1
-        if today.day < 5 or today.day == 15:
+        if today.day <= 6  or today.day == 15:
             loops += 1
 
         # Convert data

@@ -33,7 +33,10 @@ REM Open created image
 call conda deactivate
 
 echo.
-set WAIT_TIME=10
+echo TERMINATED
+
+echo.
+set WAIT_TIME=5
 echo Press any button to continue or wait %WAIT_TIME% seconds
 
 timeout /t %WAIT_TIME% > nul
