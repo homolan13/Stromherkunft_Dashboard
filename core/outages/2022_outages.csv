@@ -6,8 +6,12 @@ StartDate,StartTime,EndDate,EndTime,Type,UnitName,Reason,OldVersion
 2022-04-29 ,11:00,2022-06-22 ,11:00,Planned,Beznau 1,Failure,
 2022-04-29 ,12:00,2022-06-17 ,12:00,Planned,Beznau 1,Failure,
 2022-05-21 ,00:00,2022-06-25 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance,
+2022-05-21 ,00:00,2022-06-25 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance,True
+2022-05-21 ,00:30,2022-06-23 ,06:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance,False
 2022-05-21 ,00:30,2022-06-24 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance,
+2022-05-21 ,00:30,2022-06-24 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance,True
 2022-05-28 ,00:00,2022-07-02 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance,
+2022-05-28 ,00:00,2022-07-02 ,00:00,Planned,Kernkraftwerk Gösgen,Foreseen Maintenance,True
 2022-06-12 ,19:00,2022-07-12 ,14:00,Planned,Leibstadt,Failure,False
 2022-06-12 ,19:00,2022-07-12 ,18:00,Planned,Leibstadt,Failure,
 2022-06-12 ,19:00,2022-07-12 ,18:00,Planned,Leibstadt,Failure,True

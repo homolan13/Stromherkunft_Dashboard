@@ -38,6 +38,9 @@ kommen. Falls ein zweiter Rechner notwendig ist (z.B. als Backup), dann Schritt 
 1*. res/Aktualisierung Produktionsdaten Entso-E öffnen und die Uhrzeit bei <StartBoundary> auf mindestens eine
 Stunde später stellen.
 2. Ordner H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH auf den lokalen Speicher kopieren.
+Den neu lokal gespeicherten Ordner "Produktionsdaten Entso-E CH" zu einem beliebigen Namen OHNE Leerzeichen
+umbenennen.
+WICHTIG: Im ganzen Pfad zum neuen Ordner darf KEIN Leerzeichen vorkommen.
 3. Conda Prompt (Conda Eingabeaufforderung öffnen).
 4. Diesen Befehl eingeben: cd path/to/res (Der Pfad zur Datei environment.yml im Ordner res)
 5. Diesen Befehl eingeben: conda env create --file=environment.yml
@@ -45,8 +48,8 @@ Stunde später stellen.
 7. Aufgabenplanung öffnen.
 8. Aktion -> Aufgabe importieren... -> res/Aktualisierung Produktionsdaten Entso-E.xml öffnen -> "Aufgabe erstellen"
 öffnet sich -> Aktionen -> Bearbeiten... öffnen
-9. Durchsuchen... und scheduler.bat auswählen, den Pfad unter Programm/Skript OHNE \scheduler.bat kopieren und bei
-"Starten in (optional)" einfügen. OK und wieder OK drücken.
+9. Durchsuchen... und scheduler.bat auswählen, den Pfad unter Programm/Skript OHNE \scheduler.bat und OHNE
+Gänsefüsschen kopieren und bei "Starten in (optional)" einfügen. OK und wieder OK drücken.
 
 Die Aktualisierung der Daten und Grafiken ist nun automatisiert.
 
@@ -88,6 +91,10 @@ Struktur:
 	- generate_files.py: Dieses Script erstellt die Grafiken und die Datendateien. Greift auf dep/FileMaker.py zu.
 				   Hier werden Schriftarten, Farben, Ordnerstruktur und Weiteres definiert. Die erstellten
 				   Dateien werden im Ordner Export abgelegt. Das "heutige" Datum kann frei gewählt werden.
+				   Fehlende Dateien und Grafiken müssen manuell erstellt werden, indem das Datum geändert wird.
+				   Dabei muss aber beachtet werden, dass am Schluss das Datum wieder auf das aktuelle
+				   zurückgesetzt wird und der scheduler.bat noch einmal gestartet wird. Ausserdem zu beachten
+				   bei der manuellen Datumswahl: Die Übersichten werden immer am 6. des Folgemonats erstellt.
 	- generation: In diesen Ordner werden die gefilterten Daten im CSV-Format abgelegt. Jede Datei steht für
 			  einen Monat.
 	- outages: Hier werden die geplannten und erzwungenen Abschaltungen, ebenfalls im CSV-Format, abgelegt. Eine

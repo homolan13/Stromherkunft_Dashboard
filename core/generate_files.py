@@ -33,7 +33,7 @@ def main():
     to_log(f'Started {os.path.basename(__file__)}...')
 
     today = datetime.today() - timedelta(days=1) # real date
-    # today = datetime(2022,6,6) # custom date
+    # today = datetime(2022,8,6) # custom date
     print(f'\n{os.path.basename(__file__)} started at: {today.year}-{today.month:02d}-{today.day:02d} {today.hour:02d}:{today.minute:02d}:{today.second:02d}')
 
     fm = FileMaker(today, params)

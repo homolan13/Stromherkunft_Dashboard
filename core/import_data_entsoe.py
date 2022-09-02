@@ -30,7 +30,7 @@ def main():
     y = max([int(fname) for fname in os.listdir(os.path.join('core','generation'))])
     m = max([int(fname[5:7]) for fname in os.listdir(os.path.join('core','generation',str(y)))])
     if y != today.year or m != today.month: # This means files are missing  
-        today = datetime(y,m,28)
+        today = datetime(y,m,6)
     check_last_month = True # check if last month is already there to avoid a second, unnecessary update
     while today <= datetime.today(): # while loop to update all files up to current date
 
@@ -113,7 +113,7 @@ def main():
         today_check = deepcopy(today)
         while today.month == today_check.month: # Add days until new month is reached
             today += timedelta(days=1)
-        check_last_month = False # checking last month not necessary for following months
+        check_last_month = False # checking last month not necessary for following months/loops
 
     to_log(f'Finished {os.path.basename(__file__)}')
     to_log('', no_time=True)
