@@ -3,6 +3,7 @@ VISUALISIERUNG DER SCHWEIZER STROMHERKUNFT
 Stand: 30.08.2022 10:00
 Yanis Schärer
 yanis.schaerer@swissnuclear.ch
+Windows Passwort bei W. Denk
 
 Inhaltsverzeichnis:
 -------------------
@@ -20,6 +21,7 @@ mit dem Ziel, diese öffentlich zugänglich zu machen. Das Projekt befindet sich
 H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH. Weitere Informationen: res/Praesentation.pptx.
 WICHTIG: Sollte sich der Speicherort des Projekts ändern, muss die Variable DEST in scheduler.bat ebenfalls zum
 neuen Speicherpfad geändert werden.
+ACHTUNG: Nicht doppelklicken auf scheduler.bat, sondern rechte Maustaste "Weitere Optionen" und "Bearbeiten"
 
 
 Einrichten und Ausführen:
