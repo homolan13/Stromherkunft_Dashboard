@@ -40,7 +40,7 @@ Stunde später stellen.
 2. Ordner H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH auf den lokalen Speicher kopieren.
 3. Conda Prompt (Conda Eingabeaufforderung öffnen).
 4. Diesen Befehl eingeben: cd path/to/res (Der Pfad zur Datei environment.yml im Ordner res)
-5. Diesen Befehl eingeben: conda env create --file=environments.yml
+5. Diesen Befehl eingeben: conda env create --file=environment.yml
 6. Conda Prompt schliessen.
 7. Aufgabenplanung öffnen.
 8. Aktion -> Aufgabe importieren... -> res/Aktualisierung Produktionsdaten Entso-E.xml öffnen -> "Aufgabe erstellen"
