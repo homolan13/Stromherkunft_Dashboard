@@ -3,7 +3,6 @@ VISUALISIERUNG DER SCHWEIZER STROMHERKUNFT
 Stand: 30.08.2022 10:00
 Yanis Schärer
 yanis.schaerer@swissnuclear.ch
-Windows Passwort bei W. Denk
 
 Inhaltsverzeichnis:
 -------------------
@@ -21,13 +20,12 @@ mit dem Ziel, diese öffentlich zugänglich zu machen. Das Projekt befindet sich
 H:\KKW Unterstützung\Kernanlagen (CH)\Produktionsdaten Entso-E CH. Weitere Informationen: res/Praesentation.pptx.
 WICHTIG: Sollte sich der Speicherort des Projekts ändern, muss die Variable DEST in scheduler.bat ebenfalls zum
 neuen Speicherpfad geändert werden.
-ACHTUNG: Nicht doppelklicken auf scheduler.bat, sondern rechte Maustaste "Weitere Optionen" und "Bearbeiten"
 
 
 Einrichten und Ausführen:
 -------------------------
 WICHTIG: Um Probleme zu vermeiden, sollte die automatisierte Aktualisierung nur auf einem lokalen Rechner
-eingerichtet sein. Wenn zwei Rechner benötigt sind (z.B. wenn einer als Backup dient), dass muss beachtet
+eingerichtet sein. Wenn zwei Rechner benötigt sind (z.B. wenn einer als Backup dient), dann muss beachtet
 werden, dass der Zeitunterschied zwischen den Aufgaben in der Aufgabenplanung mindestens eine Stunde betragen.
 Die Zeit kann manuell in res/Aktualisierung Produktionsdaten Entso-E unter <StartBoundary> angepasst werden.
 
@@ -55,8 +53,8 @@ Gänsefüsschen kopieren und bei "Starten in (optional)" einfügen. OK und wiede
 
 Die Aktualisierung der Daten und Grafiken ist nun automatisiert.
 
-Wird gewünscht, dass nach jeder Aktualisierung die deutsche Grafik der letzten 30 Tage angezeigt wird, müssen die
-Doppelpunkte in den beiden Zeilen unter "REM Open created images" entfernt werden.
+Wird gewünscht, dass nach jeder Aktualisierung die deutsche Grafik der letzten 30 Tage automatisch angezeigt wird,
+müssen die Doppelpunkte in den beiden Zeilen unter "REM Open created images" entfernt werden.
 
 
 Wichtige Informationen:
@@ -72,8 +70,8 @@ Wasserkraft & Andere = Last + Export - Nuklear - Solar - Import
 SFTP-Server Details:
 host = sftp-transparency.entsoe.eu
 port = 22
-user = techmon@swissnuclear.ch
-pw = Z3*Ht~#+5oXqrfkG-sn_
+user = sftp-entsoe@swissnuclear.ch
+pw = Swissnuclear@4600!
 Mehr Infos: https://transparency.entsoe.eu/content/static_content/
 		Static%20content/knowledge%20base/SFTP-Transparency_Docs.html#welcome
 
@@ -90,13 +88,14 @@ Struktur:
 					 Details des SFTP-Servers ändern, müssen diese in dieser Datei geändert werden.
 					 Dieses Script erkennt, wenn Daten der letzten Tage, Wochen oder Monate fehlen und 
 					 lädt diese neben den aktuellsten Daten ebenfalls herunter.
-	- generate_files.py: Dieses Script erstellt die Grafiken und die Datendateien. Greift auf dep/FileMaker.py zu.
-				   Hier werden Schriftarten, Farben, Ordnerstruktur und Weiteres definiert. Die erstellten
-				   Dateien werden im Ordner Export abgelegt. Das "heutige" Datum kann frei gewählt werden.
-				   Fehlende Dateien und Grafiken müssen manuell erstellt werden, indem das Datum geändert wird.
-				   Dabei muss aber beachtet werden, dass am Schluss das Datum wieder auf das aktuelle
-				   zurückgesetzt wird und der scheduler.bat noch einmal gestartet wird. Ausserdem zu beachten
-				   bei der manuellen Datumswahl: Die Übersichten werden immer am 6. des Folgemonats erstellt.
+	- generate_files_v2.py: Dieses Script erstellt die Grafiken und die Datendateien. Greift auf dep/FileMaker.py zu.
+				   	Hier werden Schriftarten, Farben, Ordnerstruktur und Weiteres definiert. Die erstellten
+				   	Dateien werden im Ordner Export abgelegt. Das "heutige" Datum kann frei gewählt werden.
+				   	(Fehlende Dateien und Grafiken müssen manuell erstellt werden, indem das Datum geändert wird.
+				   	Dabei muss aber beachtet werden, dass am Schluss das Datum wieder auf das aktuelle
+				   	zurückgesetzt wird und der scheduler.bat noch einmal gestartet wird. -> nicht mehr nötig in v2.)
+				   	Ausserdem zu beachten
+				   	bei der manuellen Datumswahl: Die Übersichten werden immer am 6. des Folgemonats erstellt.
 	- generation: In diesen Ordner werden die gefilterten Daten im CSV-Format abgelegt. Jede Datei steht für
 			  einen Monat.
 	- outages: Hier werden die geplannten und erzwungenen Abschaltungen, ebenfalls im CSV-Format, abgelegt. Eine
@@ -120,7 +119,7 @@ Struktur:
 				     welche auch in der deutschen, französischen und italienischen Class vorhanden sind.
 - misc: Enthält Codes, welche nicht mehr verwendet werden, möglicherweise aber noch von Nutzen sein könnten.
 - res: Enthält alles statischen Elemente, wie z.B. das swissnuclear Logo oder eine Präsentation über dieses Projekt.
-- Export: Wird automatisch beim Ausführen von generate_files.py erstellt, wenn nicht schon vorhanden. Enthält alle
+- Export: Wird automatisch beim Ausführen von generate_files_v2.py erstellt, wenn nicht schon vorhanden. Enthält alle
 	    erstellten Grafiken und CSV-Dateien.
 
 

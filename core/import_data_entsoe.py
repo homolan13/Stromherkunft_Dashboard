@@ -13,7 +13,7 @@ from dep.FileHandlerLib import *
 from dep.to_log import to_log
 
 # See README.txt for server details
-server_details = {'host': 'sftp-transparency.entsoe.eu', 'port': 22, 'user': 'techmon@swissnuclear.ch', 'pw': 'Z3*Ht~#+5oXqrfkG-sn_'}
+server_details = {'host': 'sftp-transparency.entsoe.eu', 'port': 22, 'user': 'sftp-entsoe@swissnuclear.ch', 'pw': 'Swissnuclear@4600!'}
 
 custom_order_types = ['Nuclear', 'Hydro Run-of-river and poundage', 'Hydro Water Reservoir', 'Hydro Pumped Storage', 'Solar', 'Wind Onshore']
 custom_order_units = ['Kernkraftwerk Gösgen', 'Leibstadt', 'Beznau 1', 'Beznau 2', 'KKM Produktion']
@@ -30,13 +30,13 @@ def main():
     y = max([int(fname) for fname in os.listdir(os.path.join('core','generation'))])
     m = max([int(fname[5:7]) for fname in os.listdir(os.path.join('core','generation',str(y)))])
     if y != today.year or m != today.month: # This means files are missing  
-        today = datetime(y,m,6)
+        today = datetime(y,m,7)
     check_last_month = True # check if last month is already there to avoid a second, unnecessary update
     while today <= datetime.today(): # while loop to update all files up to current date
 
         if check_last_month == True:
             if today.month == datetime.today().month:
-                if today.day < 5 or today.day == 15: # update last month
+                if today.day < 7 or today.day == 15: # update last month
                     today = today - timedelta(days=today.day)
                     print('\nUpdating last month...')
 

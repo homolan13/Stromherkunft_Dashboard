@@ -104,9 +104,9 @@ class FileMaker:
 
         if self.params['save_plot']:
             path = os.path.join(d['export'], d['base'][0], d['layer1'][0])
-            for dir in os.listdir(path):
-                for f in os.listdir(os.path.join(path, dir)):
-                    os.remove(os.path.join(path, dir, f))
+            # for dir in os.listdir(path): # XXX: Wolfgang doesn't want old files removed!
+            #     for f in os.listdir(os.path.join(path, dir)):
+            #         os.remove(os.path.join(path, dir, f))
 
         ### Initialize text repository
         De = TextRepoDE('last30', today)

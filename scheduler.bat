@@ -16,7 +16,7 @@ taskkill /f /im Microsoft.Photos.exe > nul 2> nul
 
 REM Run python files
 python %~dp0\core\import_data_entsoe.py
-python %~dp0\core\generate_files.py
+python %~dp0\core\generate_files_v2.py
 
 REM Copy all non-static directories and files from local computer to destination
 robocopy %~dp0 %DEST% log.txt > nul
@@ -36,7 +36,7 @@ echo.
 echo TERMINATED
 
 echo.
-set WAIT_TIME=5
+set WAIT_TIME=10
 echo Press any button to continue or wait %WAIT_TIME% seconds
 
 timeout /t %WAIT_TIME% > nul
