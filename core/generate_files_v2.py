@@ -33,20 +33,18 @@ def get_latest_date(date_idx):
     date_length = 10 # format: 1999-01-04
     # Export/Grafiken/01_Letzte30/DE/....(yyyy-mm-dd)....
     path = os.path.join(directories['export'], directories['base'][0], directories['layer1'][0], directories['layer2'][0])
-    latest_date_str = max([fnames[date_idx:date_idx+date_length] for fnames in os.listdir(path)])
-    if not latest_date_str: # Empty list
-        y, m, d = 2022, 9, 1
-    else:
-        y = int(latest_date_str[0:4])
-        m = int(latest_date_str[5:7])
-        d = int(latest_date_str[8:10])
+    latest_date_str = max([int(fnames[date_idx:date_idx+date_length].replace('-', '')) for fnames in os.listdir(path)], default=20220101)
+    print(latest_date_str)
+    y = int(str(latest_date_str)[0:4])
+    m = int(str(latest_date_str)[4:6])
+    d = int(str(latest_date_str)[6:8])
 
     return datetime(y, m, d)
 
 
 def main():
 
-    # to_log(f'Started {os.path.basename(__file__)}...')
+    to_log(f'Started {os.path.basename(__file__)}...')
 
     today = datetime.today() - timedelta(days=1) # real date
     # today = datetime(2022,9,7) # custom date
@@ -81,8 +79,8 @@ def main():
         for fname in filenames:
             print(f'\t\t{fname}')
 
-    # to_log(f'Finished {os.path.basename(__file__)}')
-    # to_log('', no_time=True)
+    to_log(f'Finished {os.path.basename(__file__)}')
+    to_log('', no_time=True)
 
 if __name__ == '__main__':
     main()
